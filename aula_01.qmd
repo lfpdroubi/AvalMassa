@@ -1,0 +1,334 @@
+---
+title: "Avaliação em Massa de Imóveis"
+author: "Luiz F. P. Droubi"
+institute: Universidade Federal de Santa Catarina
+date: last-modified
+date-format: long
+fontsize: 1.8em
+format: 
+  revealjs:
+    theme: simple
+    scrollable: true
+    incremental: true
+lang: pt-br
+toc: true
+toc-depth: 1
+bibliography: references.bib
+---
+
+# Probabilidade
+
+## Definição clássica de probabilidade
+
+- Definição clássica de Laplace:
+  - É a razão entre a chance ($f$) que um evento ($A$) ocorra e a soma das 
+  chances de todos os eventos possíveis ($N$):
+    - $$\mathbb P(A) = \frac{f}{N}$$
+  
+- Exemplo:
+  - Ao lançar um dado, a probabilidade de obtenção de um número dentro do 
+  conjunto $\{ 1, 2 ,3, 4, 5, 6\}$  é:
+    - $$\mathbb P(A) = \frac{1}{6}$$
+    
+- Problema com esta definição: define probabilidade de um evento baseado na
+"chance"  que o evento ocorra.
+  - A cobra come o rabo!
+  
+## Escola axiomática
+
+- @kolmogorov1950:
+  - Definiu axiomas a partir dos quais é possível desenvolver a Probabilidade 
+  como uma ciência rigorosa.
+    - Espaço Amostral ($S$)
+    - $\mathbb P(S) = 1$
+    - Se dois eventos $A$ e $B$ são mutuamente exclusivos, então:
+      - $\mathbb P(A + B) = \mathbb P(A) + \mathbb P(B)$
+      
+- Na escola axiomática, os eventos são subconjuntos do espaço amostral  
+  - Assim, é comum se referir aos eventos através da teoria dos conjuntos:
+    - $\mathbb P (A \cup B) =  \mathbb P(A) + \mathbb P(B)$
+    - $\mathbb P (A \cup B) =  \mathbb P(A) + \mathbb P(B) - \mathbb P (A \cap B)$
+    
+## Escola Axiomática
+
+```{r}
+set.seed(654925)                          # Create example list
+list_venn <- list(Alto = sort(sample(1:100, 20)),
+                  Baixo = sort(sample(1:100, 20)),
+                  Centro = sort(sample(1:100, 20)),
+                  Suburbio = sort(sample(1:100, 20)))
+library(ggvenn) 
+ggvenn(list_venn, c("Alto", "Centro"))  
+```
+
+    
+## Probabilidade Complementar
+
+- $$\mathbb P(A') = 1 - \mathbb P(A)$$
+  - Por exemplo, se a probabilidade de um imóvel ser de Alto Padrão é de 25%
+    - Então a probabilidade de um imóvel não ser de Alto Padrão é de 75%!
+    
+## Probabilidade Condicional
+
+- A Probabilidade Condicional de um evento é a probabilidade que um evento
+ocorra, dado que outro evento aconteceu
+  - É designada por $\mathbb P(A|B)$
+  - É definida como o quociente entre $\mathbb P(A \cap B)$ e $\mathbb P(B)$:
+    - $$\mathbb P(A|B) = \frac{\mathbb P(A \cap B)}{\mathbb P(B)}\, \text{se }\mathbb P(B) > 0$${#eq-PCond}
+    
+## Probabilidade Condicional
+    
+- Exemplo:
+  - Há 2.000 imóveis numa cidade
+    - 100 deles encontram-se no Centro
+      - $\mathbb P(C) = 100/2.000 = 0,05$
+    - 200 deles são de alto padrão 
+      - $\mathbb P(PC_A) = 200/2.000 = 0,10$
+      - Destes 200, 80 encontram-se localizados no Centro 
+        - $\mathbb P(PC_A \cup C) = 80/2.000 = 0,04$
+  - Dado que um imóvel situa-se no Centro
+    - Qual a probabilidade de que ele seja de alto padrão?
+      - $$\mathbb P(PC_A|C) = \frac{\mathbb P(PC_A \cap C)}{P_C}$$
+      
+## Probabilidade Condicional
+
+- Dado que um imóvel situa-se no Centro
+  - Qual a probabilidade de que ele seja de alto padrão?
+    - $$\mathbb P(PC_A|C) = \frac{\mathbb P(PC_A \cap C)}{P_C}$$
+    - $$\mathbb P(PC_A|C) = \frac{0,04}{0,05} = 80\%$$
+    
+## Probabilidade Condicional
+
+```{r}
+df <- data.frame(id = 1:2000,
+                 Padrao = c(rep("Alto", 200), rep("Não-Alto", 1800)),
+                 Local = c(rep("Centro", 90), rep("Subúrbio", 110),
+                           rep("Centro", 10), rep("Subúrbio", 1790))
+                 )
+df <- within(df, {
+  Local <- factor(Local)
+  Padrao <- factor(Padrao)
+})
+df <- within(df, {
+  PU <- ifelse(Local == "Centro", 10000, 7500)
+  PU <- ifelse(Padrao == "Alto", PU*1.25, PU)
+  PU <- PU + rnorm(n = 2000, mean = 0, sd = 2000)
+})
+list_venn <- list(Alto = 1:200,
+                  `Não-Alto` = 201:2000,
+                  Centro = 121:220,
+                  `Perif.` = c(1:120, 221:2000)
+)
+ggvenn(list_venn[c(1,3)])
+```
+
+## Probabilidade Condicional
+
+```{r}
+ggvenn(list_venn)
+```
+
+## Teorema de Bayes
+
+- $$\mathbb P(A|B) = \frac{\mathbb P(A) \mathbb P(B|A)}{\mathbb P(B)}$$
+
+- Exemplo:
+  - $\mathbb P(C|PC_A) = ?$
+  - $$\mathbb P(C|PC_A) = \frac{\mathbb P(C)\mathbb P(PC_A|C)}{\mathbb P(PC_A)}$$
+  - $$\mathbb P(C|PC_A) = \frac{0,05\cdot0,80}{0,10}$$
+  - $$\mathbb P(C|PC_A) = 40\%$$
+  
+## Teorema da Multiplicação
+
+- Se dois eventos são mutuamente independentes, então:
+  - $$\mathbb P (A\cdot B) = \mathbb P(A) \mathbb P(B)$$
+  
+- Caso contrário:
+  - $$\mathbb P (A\cdot B) = \mathbb P(A) \mathbb P(B|A)$$
+  
+## Variável Aleatória
+
+- Um termo um tanto confuso
+  - Seria mais apropriado *função aleatória* [@feller, 12]
+  
+- Variávies Aleatórias na verdade são funções definidas em um espaço amostral!
+
+- Informalmente, no entanto, definiremos *variável aleatória* como o:
+  - "Resultado numérico de um experimento" [@matloff2009, 39].
+  - Por exemplo, ao lançar uma moeda diversas vezes, podemos definir:
+    - cara: 0
+    - coroa: 1
+    - Espaço Amostral: $S = \{ 0, 1 \}$
+    - Variável Aleatória: $X = \{0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, \ldots\}$
+
+# Descrição de uma variável aleatória
+
+## Distribuições de Probabilidade
+
+- Existem diversas maneiras de descrever uma variável aleatória
+
+- A mais comum delas é definir as variáveis aleatórias através de sua *função
+densidade de probabildidade* (para as var. aleatórias contínuas) ou da
+sua *função massa de probabilidade* (para as var. aleatórias discretas)
+  - Por exemplo: ao jogar um dado, qual a probabilidade de obter o número 6?
+    - Distribuição de Bernoulli:
+      - $$\mathbb P(X = k) = p^k (1-p)^{1-k}$${#eq-Bernoulli}
+        - $k=0 \rightarrow  \text{insucesso!}$
+        - $k=1 \rightarrow  \text{sucesso}!$
+      - $S = \{1, 2, 3, 4, 5, 6\}$
+      - $\mathbb P(X = 1) = (1/6)^1 \cdot (1-1/6)^{1-1}$
+      - $\mathbb P(X = 1) = 1/6 \cdot 1 = 1/6$
+
+## Distribuição de Bernoulli
+
+- $$f(k,p) = \begin{cases}
+  p & \text{ se } k = 1\\
+  q = 1 - p & \text{ se } k = 0
+  \end{cases}$$
+  
+- Percebam:
+  - $$\sum_{i=1}^{k} f(k, p) = 1$$
+  - Toda função massa de probabilidade deve somar 1!
+        
+
+## Distribuição Binomial
+
+- A *Distribuição Binomial* é a generalização da *Distribuição de Bernoulli*
+para um número qualquer de tentativas
+  - $$\mathbb P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$${#eq-Binomial}
+  - $\binom{n}{k} = \frac{n!}{k!(n-k)!}$
+
+- Probabilidade de obter duas vezes o número 6 em 10 tentativas:
+  - $\mathbb P(X = k) = \mathbb P(X = 2) = \binom{10}{2} (1/6)^2 (1-1/6)^{10-2}$
+  - $\mathbb P(X = 2) = 45 (1/6)^2 (5/6)^8 = 29,07\%$
+    - **Explicação**: Existem 45 sequências possíveis de 10 lançamentos em que 2
+    vezes surgirão o número 6, com 1/6 de probabilidade, e oito vezes outros 
+    números, com 5/6 de probabilidade
+    
+## Distribuição Binomial
+
+- $\mathbb P(X = 2) = 45 (1/6)^2 (5/6)^8 = 29,07\%$
+        
+- No R:
+
+. . . 
+
+```{r}
+#| echo: true
+dbinom(2, 10, 1/6)
+```
+
+. . . 
+
+```{r}
+#| fig-height: 3.5
+#| fig-width: 7
+#| echo: true
+library(mosaic)
+plotDist('binom', params = list(size = 10, prob = 1/6), xlim = c(-1, 11),
+         main = "Experimento de lançamento de 1 dado.",
+         xlab = "k", ylab = expression(P(X) == k))
+```
+
+
+## Distribuição Binomial
+
+- O experimento de obter um resultado específico no lançamento de um dado tem 
+uma probabiliade relativamente baixa ($p << 0,5$).
+  - Por isso a distribuição é assimétrica!
+- O experimento do lançamento de uma moeda apresenta $p = 0,5$.
+
+. . . 
+
+```{r}
+#| label: fig-SymmetricalBinomial
+#| fig-cap: "Distribuição Binomial (n = 4, p = 1/2)."
+#| fig-height: 3.5
+#| fig-width: 7
+mosaic::plotDist('binom', params = list(size = 4, prob = 1/2), xlim = c(-1, 5),
+                 main = "Experimento de lançamento de 1 moeda.",
+                 xlab = "k", ylab = expression(P(X) == k)                 )
+```
+
+
+## Binomial e Normal
+
+- Resultado de um experimento de lançamento de uma moeda:
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+
+```{r}
+#| label: fig-Binomial
+#| fig-cap: "Distribuição Binomial (n = 10, p = 1/2)."
+#| fig-width: 4
+#| fig-height: 4
+mosaic::plotDist('binom', params = list(10, 1/2),
+                 main = "Lançamento de uma moeda",
+                 sub = "Probabilidade dos Resultados Possíveis")
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| label: fig-Binomial2
+#| fig-cap: "Distribuição Binomial (n = 100, p = 1/2)."
+#| fig-width: 4
+#| fig-height: 4
+mosaic::plotDist('binom', params = list(100, 1/2),
+                 main = "Lançamento de uma moeda",
+                 sub = "Probabilidade dos Resultados Possíveis",
+                 xlab = "k", ylab = expression(P(X == k)))
+```
+
+:::
+::::
+
+- A distribuição binomial, no infinito, tende para uma forma de sino, quando $p=1/2$!
+
+## Distribuição Normal Padrão
+
+- Uma variável $Z$ com Distribuição *Normal Padrão* é a var. que tem 
+*função densidade de probabilidade* igual a:
+  - $$\phi(t) = f_Z(t) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}t^2}$${#eq-NormalPadrao}
+    - É a exponencial de uma parábola, multiplicada pela constante $1/\sqrt{2\pi}$
+    
+- Por que multiplicar por $1/\sqrt{2\pi}$?
+  - $\int_{-\infty}^{\infty} e^{-\frac{1}{2}t^2}\, \mathrm{d}t = \sqrt{2\pi}$
+  - $\int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}t^2}\, \mathrm{d}t = 1$
+    - Toda função densidade de probabilidade deve somar 1!
+  
+- A distribuição Normal Padrão tem média zero e desvio-padrão igual a 1,0
+  - Refere-se a ela como: $\mathcal N(0, 1)$
+  
+## Distribuição Normal Padrão
+
+```{r}
+#| label: fig-StdNormal
+#| fig-cap: "Distribuição Normal Padrão."
+mosaic::plotDist("norm", main = "Distribuição Normal Padrão",
+                 xlab = "t", ylab = expression(~phi(t) == f[Z](t)))
+```
+
+## Um pouco de história
+
+![Leis dos erros de Laplace](./img/Laplace_laws.png)
+
+## Um pouco de história
+
+![Aproximação Normal da Binomial](./img/DeMoivre.png)
+
+## Um pouco de história
+
+![Aproximação Normal da Binomial](./img/Binomial_Normal_Approx.gif)
+
+# Transformações de variáveis aleatórias  
+
+# Referências
+  
