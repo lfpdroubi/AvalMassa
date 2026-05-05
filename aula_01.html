@@ -6,7 +6,9 @@
 <script src="aula_01_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="aula_01_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="aula_01_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="aula_01_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<link href="aula_01_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="aula_01_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="aula_01_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.8.25">
 
   <meta name="author" content="Luiz F. P. Droubi">
@@ -227,14 +229,19 @@ Luiz F. P. Droubi
     </div>
 </div>
 
-  <p class="date">2 de maio de 2026</p>
+  <p class="date">5 de maio de 2026</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Índice</h2>
 <ul>
 <li class="fragment"><a href="#/probabilidade" id="/toc-probabilidade">Probabilidade</a></li>
 <li class="fragment"><a href="#/descrição-de-uma-variável-aleatória" id="/toc-descrição-de-uma-variável-aleatória">Descrição de uma variável aleatória</a></li>
-<li class="fragment"><a href="#/transformações-de-variáveis-aleatórias" id="/toc-transformações-de-variáveis-aleatórias">Transformações de variáveis aleatórias</a></li>
+<li class="fragment"><a href="#/transformações-lineares-de-v.a." id="/toc-transformações-lineares-de-v.a.">Transformações lineares de v.a.</a></li>
+<li class="fragment"><a href="#/regressão-linear-ordinária" id="/toc-regressão-linear-ordinária">Regressão Linear Ordinária</a></li>
+<li class="fragment"><a href="#/estimação-de-parâmetros" id="/toc-estimação-de-parâmetros">Estimação de parâmetros</a></li>
+<li class="fragment"><a href="#/transformações-não-lineares-de-v.a." id="/toc-transformações-não-lineares-de-v.a.">Transformações não-lineares de v.a.</a></li>
+<li class="fragment"><a href="#/aplicações" id="/toc-aplicações">Aplicações</a></li>
+<li class="fragment"><a href="#/análises-de-regressão" id="/toc-análises-de-regressão">Análises de Regressão</a></li>
 <li class="fragment"><a href="#/referências" id="/toc-referências">Referências</a></li>
 </ul>
 </nav>
@@ -261,7 +268,7 @@ Luiz F. P. Droubi
 <li class="fragment"><span class="math display">\[\mathbb P(A) = \frac{1}{6}\]</span></li>
 </ul></li>
 </ul></li>
-<li class="fragment">Problema com esta definição: define probabilidade de um evento baseado na “chance” que o evento ocorra.
+<li class="fragment">Problema: define probabilidade como a “chance” que o evento ocorra.
 <ul>
 <li class="fragment">A cobra come o rabo!</li>
 </ul></li>
@@ -619,16 +626,984 @@ Figura&nbsp;4: Distribuição Normal Padrão.
 <section id="um-pouco-de-história-2" class="slide level2">
 <h2>Um pouco de história</h2>
 
-<img data-src="./img/Binomial_Normal_Approx.gif" class="r-stretch quarto-figure-center"><p class="caption">Aproximação Normal da Binomial</p></section></section>
-<section id="transformações-de-variáveis-aleatórias" class="title-slide slide level1 center">
-<h1>Transformações de variáveis aleatórias</h1>
+<img data-src="./img/Binomial_Normal_Approx.gif" class="r-stretch quarto-figure-center"><p class="caption">Aproximação Normal da Binomial (De Moivre, 1733)</p></section></section>
+<section>
+<section id="transformações-lineares-de-v.a." class="title-slide slide level1 center">
+<h1>Transformações lineares de v.a.</h1>
+<ul>
+<li class="fragment">Pode-se efetuar uma transformação de uma var. aleatória <span class="math inline">\(X\)</span> assim:
+<ul>
+<li class="fragment"><span class="math display">\[Y = h(Z) = aZ + b\]</span>
+<ul>
+<li class="fragment">Estas transformações são chamadas de lineares</li>
+</ul></li>
+<li class="fragment">Quando <span class="math inline">\(Z\)</span> é uma var. discreta:
+<ul>
+<li class="fragment"><span class="math display">\[p_Y(y) = p_Z(h^{-1}(Y)) = p_Z\left (\frac{Y-b}{a} \right )\]</span></li>
+</ul></li>
+<li class="fragment">Quando <span class="math inline">\(Z\)</span> é uma var. contínua:
+<ul>
+<li class="fragment"><span id="eq-Jacobi"><span class="math display">\[f_Y(y) = f_Z(g(y))\cdot \left | \frac{\mathrm d g(y)}{\mathrm d y}\right | = f_Z(g(y))\cdot |g'(y)| \tag{5}\]</span></span>
+<ul>
+<li class="fragment"><span class="math inline">\(g(Y) = h^{-1}(Y)\)</span></li>
+<li class="fragment"><span class="math inline">\(|g'(y)|\)</span> é o Jacobiano da transformação!</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="jacobiano-de-uma-transformação-linear" class="slide level2">
+<h2>Jacobiano de uma transformação linear</h2>
+
+<img data-src="./img/Jacobian.png" class="r-stretch quarto-figure-center"><p class="caption">Jacobiano</p><ul>
+<li class="fragment">Mantem-se o paralelismo. A área é modificada por uma constante (<span class="math inline">\(\det J\)</span>)</li>
+</ul>
+</section>
+<section id="jacobiano-de-uma-transformação-linear-1" class="slide level2">
+<h2>Jacobiano de uma transformação linear</h2>
+<video id="video_shortcode_videojs_video1" width="900" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="img/Linear.mp4"></video>
+</section>
+<section id="distribuição-normal" class="slide level2">
+<h2>Distribuição Normal</h2>
+<ul>
+<li class="fragment">A partir da <em>Normal Padrão</em>, <span class="math inline">\(\mathcal N(0,1)\)</span>, é possível obter qualquer outra distribuição normal, <span class="math inline">\(\mathcal N(\mu, \sigma^2)\)</span>)!
+<ul>
+<li class="fragment">Basta fazer:
+<ul>
+<li class="fragment"><span class="math inline">\(Y = h(Z) = \sigma_Y Z + \mu_Y\)</span></li>
+<li class="fragment"><span class="math inline">\(g(Y) = h^{-1}(Y) = \frac{Y-\mu_Y}{\sigma_Y}\)</span></li>
+<li class="fragment"><span class="math inline">\(|g'(Y)| = |1/\sigma_Y|\)</span></li>
+</ul></li>
+</ul></li>
+<li class="fragment">Como fica a equação da normal genérica:
+<ul>
+<li class="fragment"><span class="math inline">\(f_Y(t) = f_Z \left (\frac{t - \mu_Y}{\sigma_Y}\right )\cdot | \frac{1}{\sigma_Y}|\)</span></li>
+<li class="fragment"><span class="math inline">\(f_Y(t) = \frac{1}{\sqrt{2\pi}} e^{-\frac{(t-\mu_Y)^2}{2\sigma_Y^2}}\cdot | \frac{1}{\sigma_Y} |\)</span></li>
+<li class="fragment"><span class="math inline">\(f_Y(t) = \frac{1}{\sigma_Y\sqrt{2\pi}} e^{-\frac{(t-\mu_Y)^2}{2\sigma_Y^2}}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="distribuição-normal-1" class="slide level2">
+<h2>Distribuição Normal</h2>
+<ul>
+<li class="fragment"><p><span id="eq-Normal"><span class="math display">\[f(t) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(t-\mu)^2}{2\sigma^2}},\, \text{para }-\infty&lt;t&lt;\infty \tag{6}\]</span></span></p></li>
+<li class="fragment"><p>Nos referiremos a uma var. aleatória <span class="math inline">\(X\)</span> com distribuição normal genérica como a da <a href="#/eq-Normal" class="quarto-xref">Equação&nbsp;6</a> assim:</p>
+<ul>
+<li class="fragment"><span class="math inline">\(X \sim \mathcal N(\mu, \sigma^2)\)</span></li>
+</ul></li>
+<li class="fragment"><p>Percebam:</p>
+<ul>
+<li class="fragment"><span class="math inline">\(\mu\)</span> é um parâmetro que muda a <em>posição</em> da distribuição!</li>
+<li class="fragment"><span class="math inline">\(\sigma\)</span> é um parâmetro que muda a <em>escala</em> da distribuição!</li>
+</ul></li>
+</ul>
+</section>
+<section id="distribuição-normal-2" class="slide level2">
+<h2>Distribuição Normal</h2>
+<ul>
+<li class="fragment">O contrário também é verdadeiro:
+<ul>
+<li class="fragment">É possível obter a <em>Normal Padrão</em> a partir de uma distribuição normal qualquer!</li>
+<li class="fragment">Basta fazer: <span class="math display">\[Z = \frac{Y - \mu_Y}{\sigma_Y}\]</span></li>
+</ul></li>
+<li class="fragment">Exemplo:
+<ul>
+<li class="fragment">Se <span class="math inline">\(Y \sim \mathcal N(100, 10^2)\)</span>
+<ul>
+<li class="fragment">A quantos desvios-padrões de distância se encontra o valor 125? Qual a probabilidade de ocorrência de valores iguais ou maiores do que ele?
+<ul>
+<li class="fragment"><span class="math display">\[Z = (125 - 100)/10 =2,5\]</span>
+<ul>
+<li class="fragment">o desvio se encontra a 2,5DP de distância da média</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="distribuição-normal-3" class="slide level2">
+<h2>Distribuição Normal</h2>
+<ul>
+<li class="fragment">Probabilidade de ocorrências de valores iguais ou maiores:
+<ul>
+<li class="fragment">Tabela de Escores-Z!
+<ul>
+<li class="fragment"><span class="math inline">\(\mathbb P(Z \geq 2,5) = 1 - 0,99379 = 0,00621 = 0,62\%\)</span></li>
+</ul></li>
+</ul></li>
+<li class="fragment">No R:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fl">2.5</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.006209665</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Ou:</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">125</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.006209665</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="distribuição-normal-4" class="slide level2">
+<h2>Distribuição Normal</h2>
+
+<img data-src="aula_01_files/figure-revealjs/fig-Normal-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Normal"><p class="caption">
+Figura&nbsp;5: Distribuição Normal <span class="math inline">\(\mathcal N(100, 10^2)\)</span> (<span class="math inline">\(\mu = 100,\, \sigma = 10\)</span>).
+</p></section>
+<section id="equivalência" class="slide level2">
+<h2>Equivalência</h2>
+<ul>
+<li class="fragment"><p>Se uma variável aleatória <span class="math inline">\(\mathbf X\)</span> que armazena as temperaturas médias diárias de uma determinada localidade, em ºF, de forma que <span class="math inline">\(\mathbf X \sim \mathcal N(95, 9^2)\)</span></p></li>
+<li class="fragment"><p>Então uma variável <span class="math inline">\(\mathbf Y\)</span> que é a transformação linear de <span class="math inline">\(\mathbf X\)</span> conforme a <a href="#/eq-Fahrenheit" class="quarto-xref">Equação&nbsp;7</a>:</p>
+<ul>
+<li class="fragment"><span id="eq-Fahrenheit"><span class="math display">\[Y = \frac{X - 32}{9/5} \tag{7}\]</span></span></li>
+<li class="fragment">Deverá representar as mesmas probabilidades do fenômeno físico, porém numa escala diferente (no caso, a escala Celsius)!</li>
+</ul></li>
+<li class="fragment"><p>Na escala Celsius, a variável apresentará distribuição normal, porém com média 35ºC e desvio-padrão igual 5,0 ºC!</p>
+<ul>
+<li class="fragment">Ou seja, <span class="math inline">\(\mathbf Y \sim \mathcal N(35, 5^2)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="equivalência-1" class="slide level2">
+<h2>Equivalência</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><p><span class="math inline">\(\mathbf X \sim \mathcal N(95, 9^2)\)</span></p></li>
+<li class="fragment"><p>A dois desvios-padrões de distância da média da variável <span class="math inline">\(\mathbf X\)</span> está a temperatura <span class="math inline">\(95 + 2\cdot9 = 113 ^{\circ}\text{F}\)</span></p></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><p><span class="math inline">\(\mathbf Y \sim \mathcal N(35, 5^2)\)</span></p></li>
+<li class="fragment"><p>A dois desvios-padrões de distância da média da variável <span class="math inline">\(\mathbf Y\)</span> encontra-se a temperatura <span class="math inline">\(35+2\cdot 5 = 45 ^{\circ}\text{C}\)</span></p></li>
+</ul>
+</div></div>
+<ul>
+<li class="fragment"><p><span class="math inline">\(^{\circ}\text{C} = \frac{113-32}{9/5} = 45\)</span></p></li>
+<li class="fragment"><p>A prob. de que a temp. média diária nessa localidade seja maior do que 45ºC</p>
+<ul>
+<li class="fragment">É igual à prob. de que a temp. média diária nesse local seja maior do que 113ºF!</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">113</span>, <span class="at">mean =</span> <span class="dv">95</span>, <span class="at">sd =</span> <span class="dv">9</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02275013</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">45</span>, <span class="at">mean =</span> <span class="dv">35</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02275013</code></pre>
+</div>
+</div>
+</div></div>
+<ul>
+<li class="fragment">Que é também a prob. de que a variável <span class="math inline">\(\mathbf Z \sim \mathcal N(0,1)\)</span> seja maior do que 2,0:</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="dv">1</span><span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02275013</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="extendendo-para-outras-dimensões" class="slide level2">
+<h2>Extendendo para outras dimensões</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">São duas v.a.: <span class="math inline">\(\bf X \sim \mathcal N (\mu_x, \sigma^2_x) \text{ e } \bf Y \sim N (\mu_y, \sigma^2_y)\)</span></li>
+<li class="fragment">Um parâmetro, <span class="math inline">\(\rho\)</span>, controla o grau de associação ou correlação entre <span class="math inline">\(\bf X\)</span> e <span class="math inline">\(\bf Y\)</span>.</li>
+</ul>
+</section>
+<section id="extendendo-para-outras-dimensões-1" class="slide level2">
+<h2>Extendendo para outras dimensões</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<section id="extendendo-para-outras-dimensões-2" class="slide level2">
+<h2>Extendendo para outras dimensões</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<section id="extendendo-para-outras-dimensões-3" class="slide level2">
+<h2>Extendendo para outras dimensões</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">A reta de regressão é o lugar geométrico das tangentes verticais das elipses</li>
+</ul>
+</section>
+<section id="aparte-galton-e-a-primeira-regressão" class="slide level2">
+<h2>Aparte: Galton e a primeira regressão</h2>
+
+<img data-src="./img/Galtons_correlation_diagram_1875.jpg" width="372" class="r-stretch"></section>
+<section id="aparte-galton-e-a-primeira-regressão-2" class="slide level2">
+<h2>Aparte: Galton e a primeira regressão (2)</h2>
+
+<img data-src="./img/Galton_Regression.webp" class="r-stretch"></section>
+<section id="extendendo-para-outras-dimensões-4" class="slide level2">
+<h2>Extendendo para outras dimensões</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment">No limite (<span class="math inline">\(\rho = 1\)</span>), o modelo se degenera para um modelo determinístico.</li>
+</ul>
+</section></section>
+<section>
+<section id="regressão-linear-ordinária" class="title-slide slide level1 center">
+<h1>Regressão Linear Ordinária</h1>
 
 </section>
+<section id="regressão-linear-simples" class="slide level2">
+<h2>Regressão Linear Simples</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb14-2"><a href=""></a><span class="fu">data</span>(hprice1)</span>
+<span id="cb14-3"><a href=""></a><span class="fu">plot</span>(price <span class="sc">~</span> sqrft, <span class="at">data =</span> hprice1)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="regressão-linear-simples-1" class="slide level2">
+<h2>Regressão Linear Simples</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">plot</span>(price <span class="sc">~</span> sqrft, <span class="at">data =</span> hprice1)</span>
+<span id="cb15-2"><a href=""></a><span class="fu">abline</span>(<span class="fu">lm</span>(price <span class="sc">~</span> sqrft, <span class="at">data =</span> hprice1), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<section id="regressão-linear-simples-2" class="slide level2">
+<h2>Regressão Linear Simples</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">plot</span>(price <span class="sc">~</span> <span class="fu">I</span>(sqrft<span class="sc">*</span><span class="fl">0.092903</span>), <span class="at">data =</span> hprice1)</span>
+<span id="cb16-2"><a href=""></a><span class="fu">abline</span>(<span class="fu">lm</span>(price <span class="sc">~</span> <span class="fu">I</span>(sqrft<span class="sc">*</span><span class="fl">0.092903</span>), <span class="at">data =</span> hprice1), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<section id="regressão-linear-simples-interpretação" class="slide level2">
+<h2>Regressão Linear Simples: interpretação</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">summary</span>(<span class="fu">lm</span>(price <span class="sc">~</span> <span class="fu">I</span>(sqrft<span class="sc">*</span><span class="fl">0.092903</span>), <span class="at">data =</span> hprice1))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = price ~ I(sqrft * 0.092903), data = hprice1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-117.112  -36.348   -6.503   31.701  235.253 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)          11.2041    24.7426   0.453    0.652    
+I(sqrft * 0.092903)   1.5092     0.1272  11.866   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 63.62 on 86 degrees of freedom
+Multiple R-squared:  0.6208,    Adjusted R-squared:  0.6164 
+F-statistic: 140.8 on 1 and 86 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Para cada metro quadrado adicional, o preço dos imóveis aumenta US$ 1.500,00.</li>
+</ul>
+</section>
+<section id="regressão-linear-simples-interpretação-1" class="slide level2">
+<h2>Regressão Linear Simples: interpretação</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">summary</span>(<span class="fu">lm</span>(price <span class="sc">~</span> <span class="fu">I</span>(sqrft<span class="sc">*</span><span class="fl">0.092903</span> <span class="sc">-</span> <span class="dv">100</span>), <span class="at">data =</span> hprice1))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = price ~ I(sqrft * 0.092903 - 100), data = hprice1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-117.112  -36.348   -6.503   31.701  235.253 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               162.1260    12.9870   12.48   &lt;2e-16 ***
+I(sqrft * 0.092903 - 100)   1.5092     0.1272   11.87   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 63.62 on 86 degrees of freedom
+Multiple R-squared:  0.6208,    Adjusted R-squared:  0.6164 
+F-statistic: 140.8 on 1 and 86 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Uma casa com 100 <span class="math inline">\(m^2\)</span> vale, <strong>em média</strong>, US$ 162.000,00.</li>
+</ul>
+</section>
+<section id="regressão-linear-múltipla" class="slide level2">
+<h2>Regressão Linear Múltipla</h2>
+<ul>
+<li class="fragment">Na regressão linear simples:
+<ul>
+<li class="fragment"><span id="eq-RLS"><span class="math display">\[y = \alpha + \beta x + \varepsilon \tag{8}\]</span></span></li>
+<li class="fragment"><span class="math inline">\(\varepsilon \sim \mathcal N(0, \sigma_e^2)\)</span></li>
+</ul></li>
+<li class="fragment">Na regressão linear múltipla:
+<ul>
+<li class="fragment"><span id="eq-RLM"><span class="math display">\[y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \ldots + \beta_k x_k + \varepsilon \tag{9}\]</span></span></li>
+<li class="fragment"><span class="math inline">\(\varepsilon \sim \mathcal N(0, \sigma_e^2)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="regressão-linear-múltipla-1" class="slide level2">
+<h2>Regressão Linear Múltipla</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">summary</span>(<span class="fu">lm</span>(price <span class="sc">~</span> <span class="fu">I</span>(sqrft<span class="sc">*</span><span class="fl">0.092903</span> <span class="sc">-</span> <span class="dv">100</span>) <span class="sc">+</span> <span class="fu">I</span>(bdrms <span class="sc">-</span> <span class="dv">1</span>), <span class="at">data =</span> hprice1))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = price ~ I(sqrft * 0.092903 - 100) + I(bdrms - 1), 
+    data = hprice1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-127.627  -42.876   -7.051   32.589  229.003 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               134.1308    21.6979   6.182 2.12e-08 ***
+I(sqrft * 0.092903 - 100)   1.3825     0.1488   9.291 1.39e-14 ***
+I(bdrms - 1)               15.1982     9.4835   1.603    0.113    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 63.04 on 85 degrees of freedom
+Multiple R-squared:  0.6319,    Adjusted R-squared:  0.6233 
+F-statistic: 72.96 on 2 and 85 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Interpretação:
+<ul>
+<li class="fragment">uma casa com um quarto e 100 <span class="math inline">\(m^2\)</span> vale, em média, US$ 134.000,00;</li>
+<li class="fragment">cada <span class="math inline">\(m^2\)</span> adicional aumenta o valor da casa em US$ 1.382,50;</li>
+<li class="fragment">cada quarto adicional aumenta o valor da casa em US$ 15.200,00.</li>
+</ul></li>
+</ul>
+</section>
+<section id="regressão-linear-múltipla-2" class="slide level2">
+<h2>Regressão Linear Múltipla</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">summary</span>(<span class="fu">lm</span>(price <span class="sc">~</span> <span class="fu">I</span>(sqrft<span class="sc">*</span><span class="fl">0.092903</span> <span class="sc">-</span> <span class="dv">100</span>) <span class="sc">+</span> <span class="fu">I</span>(bdrms <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">I</span>(lotsize), <span class="at">data =</span> hprice1))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = price ~ I(sqrft * 0.092903 - 100) + I(bdrms - 1) + 
+    I(lotsize), data = hprice1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-120.026  -38.530   -6.555   32.323  209.376 
+
+Coefficients:
+                           Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               1.242e+02  2.082e+01   5.967 5.55e-08 ***
+I(sqrft * 0.092903 - 100) 1.322e+00  1.425e-01   9.275 1.66e-14 ***
+I(bdrms - 1)              1.385e+01  9.010e+00   1.537  0.12795    
+I(lotsize)                2.068e-03  6.421e-04   3.220  0.00182 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 59.83 on 84 degrees of freedom
+Multiple R-squared:  0.6724,    Adjusted R-squared:  0.6607 
+F-statistic: 57.46 on 3 and 84 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="estimação-de-parâmetros" class="title-slide slide level1 center">
+<h1>Estimação de parâmetros</h1>
+
+</section>
+<section id="máxima-verossimilhança" class="slide level2">
+<h2>Máxima Verossimilhança</h2>
+<ul>
+<li class="fragment">A estimação dos parâmetros de uma distribuição normal pode ser feita por <strong>máxima verossimilhança</strong>.</li>
+</ul>
+<div class="fragment">
+<blockquote>
+<p>within the framework of a statistical model, a particular set of data supports one statistical hypothesis better than another if the likelihood of the first hypothesis, [given] the data, exceeds the likelihood of the second hypothesis <span class="citation" data-cites="Edwards1974">(<a href="#/referências" role="doc-biblioref" onclick="">Edwards 1974, 30</a>)</span>.</p>
+</blockquote>
+</div>
+<div class="fragment">
+<ul>
+<li class="fragment"><p><span id="eq-likelihood"><span class="math display">\[L(\mu, \sigma^2 | x_1, x_2, \ldots, x_n) = \prod_{i=1}^n  \frac{1}{\sqrt{2\pi\sigma^2}}e^{-(x_i-\mu)^2/2\sigma^2} \tag{10}\]</span></span></p></li>
+<li class="fragment"><p>Procura-se <span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma^2\)</span> que maximizam a <a href="#/eq-likelihood" class="quarto-xref">Equação&nbsp;10</a>.</p></li>
+</ul>
+</div>
+</section>
+<section id="máxima-verossimilhança-1" class="slide level2">
+<h2>Máxima Verossimilhança</h2>
+<ul>
+<li class="fragment">É mais fácil computacionalmente maximizar <span class="math inline">\(\ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n))\)</span>:
+<ul>
+<li class="fragment"><span id="eq-loglikelihood"><span class="math display">\[\ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n) = \ln (L(\mu, \sigma^2 | x_1, x_2, \ldots, x_n)) \tag{11}\]</span></span></li>
+</ul></li>
+<li class="fragment">Então:
+<ul>
+<li class="fragment"><span class="math display">\[
+\begin{align*}
+\ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n) &amp;= -\frac{n}{2} \ln(2\pi) - n \ln(\pi) - \frac{(x_1 - \mu)^2}{2\sigma^2} - \\
+&amp;\frac{(x_2 - \mu)^2}{2\sigma^2} - \ldots - \frac{(x_n - \mu)^2}{2\sigma^2}
+\end{align*}
+\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="máxima-verossimilhança-2" class="slide level2">
+<h2>Máxima Verossimilhança</h2>
+<ul>
+<li class="fragment">O processo de maximização consiste em fazer:</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><span class="math display">\[\frac{\partial \ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n)}{\partial \mu} = 0\]</span></li>
+<li class="fragment"><span class="math display">\[\hat \mu = \frac{(x_1 + \ldots + x_n)}{n}\]</span></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><span class="math display">\[\frac{\partial \ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n)}{\partial \sigma} = 0\]</span></li>
+<li class="fragment"><span class="math display">\[\hat \sigma = \sqrt{\frac{(x_1 - \mu)^2 + \ldots + (x_n - \mu)^2}{n}}\]</span></li>
+</ul>
+</div></div>
+<ul>
+<li class="fragment"><p>Em suma, a média amostral é o estimador de máxima verossimilhança para <span class="math inline">\(\mu\)</span> e o desvio-padrão amostral é o estimador de máxima verossimilhança para o parâmetro <span class="math inline">\(\sigma\)</span>.</p></li>
+<li class="fragment"><p>Ver <a href="https://youtu.be/Dn6b9fCIUpM?si=53TEm8EKX1-TzzQw">link</a> para uma explicação detalhada</p></li>
+</ul>
+</section>
+<section id="estimação-na-regressão-linear" class="slide level2">
+<h2>Estimação na regressão linear</h2>
+<ul>
+<li class="fragment">A regressão linear consiste na <strong>minimização dos resíduos quadráticos</strong>:
+<ul>
+<li class="fragment"><span id="eq-OLS"><span class="math display">\[\min \sum_{i=1}^n \epsilon_i^2 \tag{12}\]</span></span></li>
+</ul></li>
+<li class="fragment">O resíduo é a diferença entre o valor observado e o valor estimado pelo modelo:
+<ul>
+<li class="fragment">Ou seja, pode-se escrever a <a href="#/eq-OLS" class="quarto-xref">Equação&nbsp;12</a> como:
+<ul>
+<li class="fragment"><span class="math display">\[\beta_{OLS} = \]</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="lei-dos-grandes-números-lgn" class="slide level2">
+<h2>Lei dos Grandes Números (LGN)</h2>
+<ul>
+<li class="fragment"><p>Está na raiz do nascimento da Teoria das Probabilidades a Lei <em>Fraca</em> dos Grandes Números!</p></li>
+<li class="fragment"><p>Teorema 3.1 (A Lei Fraca dos Grandes Números). Seja <span class="math inline">\(X_1, \ldots , X_n\)</span> variáveis aleatórias independentes e identicamente distribuídas com valor esperado <span class="math inline">\(\mathbb E(X_i) = \mu\)</span> e variância finita <span class="math inline">\(\mathbb V(X_i) &lt; \infty\)</span>, para <span class="math inline">\(i = 1, \ldots, n\)</span>. A média amostral é definida como:</p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[\overline X_n = \frac{1}{n}\sum_{i=1}^n = X_i\]</span></p>
+<p>Então, para qualquer número positivo <span class="math inline">\(\epsilon &gt; 0\)</span>, a probabilidade que a diferença entre a média amostral e o valor esperado <span class="math inline">\(\mu\)</span> seja menor do que <span class="math inline">\(\epsilon\)</span> vai se aproximar de 1, à medida que o tamanho da amostra se aproxima de infinito:</p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[\lim_{n \rightarrow \infty} = \mathbb P (|\overline X_n - \mu| &lt; \epsilon) = 1\]</span></p>
+</div>
+</section>
+<section id="distribuição-de-cauchy-padrão" class="slide level2">
+<h2>Distribuição de Cauchy Padrão</h2>
+<ul>
+<li class="fragment">A distribuição de <em>Cauchy Padrão</em> tem <em>função densidade de probabilidade</em> (<em>fdp</em>):
+<ul>
+<li class="fragment"><span id="eq-StdCauchy"><span class="math display">\[f_X(t) = \frac{1}{\pi}\cdot \left ( \frac{1}{1+t^2}\right) \tag{13}\]</span></span></li>
+</ul></li>
+<li class="fragment">A distribuição de Cauchy genérica tem <em>fdp</em>:
+<ul>
+<li class="fragment"><span id="eq-Cauchy"><span class="math display">\[f_X(t) = \frac{1}{\pi\gamma}\left ( \frac{1}{1+\left (\frac{t-t_0}{\gamma} \right )^2}\right) \tag{14}\]</span></span>
+<ul>
+<li class="fragment">A <a href="#/eq-Cauchy" class="quarto-xref">Equação&nbsp;14</a> é obtida através da transformação linear da <a href="#/eq-StdCauchy" class="quarto-xref">Equação&nbsp;13</a>:
+<ul>
+<li class="fragment"><span class="math inline">\(t_0\)</span> é um parâmetro de posição</li>
+<li class="fragment"><span class="math inline">\(\gamma\)</span> é um parâmetro de escala</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li class="fragment">A distribuição de Cauchy não apresenta média nem variância finitas!</li>
+</ul>
+</section>
+<section id="distribuição-de-cauchy" class="slide level2">
+<h2>Distribuição de Cauchy</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Distr. de Cauchy Padrão (em vermelho) vs.&nbsp;Distr. Normal Padrão (em azul)</p><ul>
+<li class="fragment">A distribuição de Cauchy possui caudas mais pesadas do que a distribuição normal!</li>
+</ul>
+</section>
+<section id="lgn" class="slide level2">
+<h2>LGN</h2>
+<div id="fig-LLN" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-LLN-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-LLN" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-LLN">
+<div id="fig-LLNa" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-LLNa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="aula_01_files/figure-revealjs/fig-LLNa-1.png" data-ref-parent="fig-LLN" width="432">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-LLNa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Estimativa do parâmetro de posição para a dist. Normal Padrão.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-LLN" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-LLN">
+<div id="fig-LLNb" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-LLNb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="aula_01_files/figure-revealjs/fig-LLNb-1.png" data-ref-parent="fig-LLN" width="432">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-LLNb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Estimativa do parâmetro de posição para a dist. Cauchy Padrão.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LLN-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6: Lei dos Grandes Números
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="como-estimar-o-parâmetro-da-cauchy" class="slide level2">
+<h2>Como estimar o parâmetro da Cauchy?</h2>
+<ul>
+<li class="fragment">Se a média amostral não é consistente para estimar o parâmetro de posição da Distribuição de Cauchy, como fazê-lo?
+<ul>
+<li class="fragment">A questão é que alguns poucos dados extremos da amostra desestabilizam a média amostral!</li>
+<li class="fragment">Precisa-se, portanto, de um estimador robusto a <em>outliers</em>!
+<ul>
+<li class="fragment">É natural pensar na mediana!</li>
+<li class="fragment">Porém, há outras possibilidades, como a média aparada!</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="lgn---mediana" class="slide level2">
+<h2>LGN - mediana</h2>
+<div id="fig-LLN2" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-LLN2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-LLN2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-LLN2">
+<div id="fig-LLN2a" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-LLN2a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="aula_01_files/figure-revealjs/fig-LLN2a-1.png" data-ref-parent="fig-LLN2" width="432">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-LLN2a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Estimativa do parâmetro de posição para a dist. Normal Padrão.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-LLN2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-LLN2">
+<div id="fig-LLN2b" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-LLN2b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="aula_01_files/figure-revealjs/fig-LLN2b-1.png" data-ref-parent="fig-LLN2" width="432">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-LLN2b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Estimativa do parâmetro de posição para a dist. Cauchy Padrão.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LLN2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;7: Lei dos Grandes Números - mediana
+</figcaption>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="transformações-não-lineares-de-v.a." class="title-slide slide level1 center">
+<h1>Transformações não-lineares de v.a.</h1>
+<ul>
+<li class="fragment">Também podemos utilizar funções <span class="math inline">\(h(X)\)</span> não-lineares para transformar variáveis aleatórias
+<ul>
+<li class="fragment">Por exemplo: <span class="math inline">\(Y = h(Z) = Z^2\)</span>
+<ul>
+<li class="fragment">A variável <span class="math inline">\(Y\)</span> obtida com a elevação ao quadrado de uma var. com dist. normal padrão tem distribuição dita <span class="math inline">\(\chi^2_{(1)}\)</span>
+<ul>
+<li class="fragment"><span class="math display">\[f_Y(t) = \begin{cases}
+\frac{1}{\sqrt{2\pi t}} e^{-\frac{t}{2}} &amp; \text { se } t&gt; 0 \\
+0 &amp; \text{ se } t \leq 0
+\end{cases}\]</span></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li class="fragment">Uma medida da <em>dispersão</em> amostral, denominada <em>variância</em> é:
+<ul>
+<li class="fragment"><span id="eq-Variance"><span class="math display">\[\mathbb V(X) = \frac{1}{n}\sum_{i = 1}^{n} (X_i - \mu)^2 \tag{15}\]</span></span>
+<ul>
+<li class="fragment">É fácil notar que <span class="math inline">\(Y = \mathbb V(X) \sim \chi^2_{(1)}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="distribuição-chi2_1" class="slide level2">
+<h2>Distribuição <span class="math inline">\(\chi^2_{(1)}\)</span></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">plotDist</span>(<span class="st">'chisq'</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">df =</span> <span class="dv">1</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb25-2"><a href=""></a>         <span class="at">main =</span> <span class="fu">expression</span>(<span class="st">"Distribuição"</span> <span class="sc">~</span>chi[(<span class="dv">1</span>)]<span class="sc">^</span><span class="dv">2</span>),</span>
+<span id="cb25-3"><a href=""></a>         <span class="at">xlab =</span> <span class="st">"t"</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> Z<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/fig-chiSquared-1.png" width="672" class="r-stretch quarto-figure-center" id="fig-chiSquared"><p class="caption">
+Figura&nbsp;8: Distribuição <span class="math inline">\(\chi^2\)</span> com 1 grau de liberdade.
+</p><ul>
+<li class="fragment"><span class="math inline">\(\mathbb E(Y) = 1\)</span> (variância da distribuição normal padrão é igual a 1!)</li>
+</ul>
+</section>
+<section id="transformações-não-lineares" class="slide level2">
+<h2>Transformações não-lineares</h2>
+<ul>
+<li class="fragment">Seja <span class="math inline">\(Z\)</span> uma variável com distribuição normal padrão
+<ul>
+<li class="fragment">Seja <span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma&gt;0\)</span> dois números reais
+<ul>
+<li class="fragment">Então <span id="eq-TransfLognormal"><span class="math display">\[X = e^{\mu + \sigma Z} \tag{16}\]</span></span>
+<ul>
+<li class="fragment">tem distribuição dita lognormal!</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li class="fragment">Inversamente, se <span class="math inline">\(X\)</span> é uma variável com distribuição lognormal
+<ul>
+<li class="fragment">Então <span class="math inline">\(Y = \ln(X)\)</span>
+<ul>
+<li class="fragment">É uma variável com distribuição normal!</li>
+</ul></li>
+</ul></li>
+<li class="fragment">A distribuição lognormal tem <em>fdp</em>:
+<ul>
+<li class="fragment"><span id="eq-Lognormal"><span class="math display">\[f_X(t) = \frac{1}{t\sigma\sqrt{2\pi}}\exp\left (-\frac{(\ln(t) - \mu)^2}{2\sigma^2} \right) \tag{17}\]</span></span></li>
+</ul></li>
+</ul>
+</section>
+<section id="distribuição-lognormal" class="slide level2">
+<h2>Distribuição Lognormal</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>mosaic<span class="sc">::</span><span class="fu">plotDist</span>(<span class="st">"lnorm"</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">meanlog =</span> <span class="dv">0</span>, <span class="at">sdlog =</span> <span class="fl">0.25</span>),</span>
+<span id="cb26-2"><a href=""></a>                 <span class="at">main =</span> <span class="st">"Distribuição Lognormal"</span>,</span>
+<span id="cb26-3"><a href=""></a>                 <span class="at">xlab =</span> <span class="st">"t"</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> e<span class="sc">^</span>{<span class="fl">0.25</span><span class="sc">*</span>Z}))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/fig-Lognormal-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Lognormal"><p class="caption">
+Figura&nbsp;9: Distribuição Lognormal
+</p></section>
+<section id="distribuição-lognormal-1" class="slide level2">
+<h2>Distribuição Lognormal</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>mosaic<span class="sc">::</span><span class="fu">plotDist</span>(<span class="st">"lnorm"</span>, <span class="at">params =</span> <span class="fu">list</span>(<span class="at">meanlog =</span> <span class="fu">log</span>(<span class="dv">5000</span>), <span class="at">sdlog =</span> <span class="fl">0.25</span>),</span>
+<span id="cb27-2"><a href=""></a>                 <span class="at">main =</span> <span class="st">"Distribuição Lognormal"</span>,</span>
+<span id="cb27-3"><a href=""></a>                 <span class="at">xlab =</span> <span class="st">"t"</span>, </span>
+<span id="cb27-4"><a href=""></a>                 <span class="at">ylab =</span> <span class="fu">expression</span>(f[Y](t) <span class="sc">==</span> e<span class="sc">^</span>{<span class="fl">0.25</span><span class="sc">*</span>Z<span class="sc">~+</span><span class="er">~</span><span class="fu">plain</span>(ln)<span class="sc">~</span><span class="dv">5000</span>})</span>
+<span id="cb27-5"><a href=""></a>                 )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/fig-Lognormal2-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Lognormal2"><p class="caption">
+Figura&nbsp;10: Distribuição Lognormal (<span class="math inline">\(\mu^* = 5000\)</span>)
+</p></section>
+<section id="distribuição-lognormal-2" class="slide level2">
+<h2>Distribuição Lognormal</h2>
+<h3 id="estimação-de-parâmetros-1">Estimação de parâmetros</h3>
+<ul>
+<li class="fragment">Os parãmetros da distribuição lognormal podem ser assim estimados:
+<ul>
+<li class="fragment"><span class="math display">\[\hat \mu = \frac{1}{n} \sum_{i=1}^n \ln(X_i)\]</span></li>
+<li class="fragment"><span class="math display">\[\hat \sigma^2 = \frac{1}{n} \sum_{i=1}^n (\ln(X_i)-\hat\mu)^2\]</span></li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="aplicações" class="title-slide slide level1 center">
+<h1>Aplicações</h1>
+
+</section>
+<section id="casas-nos-eua" class="slide level2">
+<h2>Casas nos EUA</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">library</span>(wooldridge)</span>
+<span id="cb28-2"><a href=""></a><span class="fu">data</span>(hprice3)</span>
+<span id="cb28-3"><a href=""></a><span class="fu">head</span>(hprice3, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   year age agesq nbh  cbd inst  linst price rooms area  land baths  dist
+1  1978  48  2304   4 3000 1000 6.9078 60000     7 1660  4578     1 10700
+2  1978  83  6889   4 4000 1000 6.9078 40000     6 2612  8370     2 11000
+3  1978  58  3364   4 4000 1000 6.9078 34000     6 1144  5000     1 11500
+4  1978  11   121   4 4000 1000 6.9078 63900     5 1136 10000     1 11900
+5  1978  48  2304   4 4000 2000 7.6009 44000     5 1868 10000     1 12100
+6  1978  78  6084   4 3000 2000 7.6009 46000     6 1780  9500     3 10000
+7  1978  22   484   4 4000 2000 7.6009 56000     6 1700 10878     2 11700
+8  1978  78  6084   4 3000 2000 7.6009 38500     6 1556  3870     2 10200
+9  1978  42  1764   4 3000 2000 7.6009 60500     8 1642  7000     2 10500
+10 1978  41  1681   4 3000 2000 7.6009 55000     5 1443  7950     2 11000
+      ldist   lprice y81    larea    lland  linstsq
+1  9.277999 11.00210   0 7.414573 8.429017 47.71770
+2  9.305651 10.59663   0 7.867871 9.032409 47.71770
+3  9.350102 10.43412   0 7.042286 8.517193 47.71770
+4  9.384294 11.06507   0 7.035269 9.210340 47.71770
+5  9.400961 10.69195   0 7.532624 9.210340 57.77368
+6  9.210340 10.73640   0 7.484369 9.159047 57.77368
+7  9.367344 10.93311   0 7.438384 9.294497 57.77368
+8  9.230143 10.55841   0 7.349874 8.261010 57.77368
+9  9.259131 11.01040   0 7.403670 8.853665 57.77368
+10 9.305651 10.91509   0 7.274479 8.980927 57.77368</code></pre>
+</div>
+</div>
+</section>
+<section id="análise-exploratória" class="slide level2">
+<h2>Análise Exploratória</h2>
+<h3 id="diagramas-de-caixa">Diagramas de Caixa</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">boxplot</span>(hprice3<span class="sc">$</span>price, <span class="at">horizontal =</span> T)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
+<section id="análise-exploratória-1" class="slide level2">
+<h2>Análise Exploratória</h2>
+
+<img data-src="./img/boxplot_1.png" class="r-stretch quarto-figure-center"><p class="caption">Como é construído um Diagrama de Caixa</p></section>
+<section id="os-cinco-números-de-tukey" class="slide level2">
+<h2>Os cinco números de Tukey</h2>
+<ul>
+<li class="fragment">O famoso estatístico John Tukey, em sua obra clássica, <em>Exploratory Data Analysis</em>, sugeriu os diagramas de caixa para ilustrar rapidamente os cinco números que considerava sugestivos da amostra:
+<ul>
+<li class="fragment">Valor Mínimo</li>
+<li class="fragment">Primeiro Quartil</li>
+<li class="fragment">Segundo Quartil ou Mediana</li>
+<li class="fragment">Terceiro Quartil</li>
+<li class="fragment">Valor Máximo</li>
+</ul></li>
+</ul>
+</section>
+<section id="o-que-são-quartis" class="slide level2">
+<h2>O que são Quartis?</h2>
+<ul>
+<li class="fragment">Para uma variável aleatória <span class="math inline">\(X = X_1, X_2, \ldots, X_n\)</span>, o k-ésimo quartil, <span class="math inline">\(Q_k\)</span>, é definido como o valor que separa a amostra em dois subconjuntos tal que (Moors 1988, 25):
+<ul>
+<li class="fragment"><span class="math display">\[\mathbb P(X &lt; Q_K) \leq k/4, \, \mathbb P(X &gt; Q_K) \leq 1 - k/4, \, k = 1, 2, 3\]</span></li>
+</ul></li>
+<li class="fragment">Também pode-se dizer, mas é menos comum, que <span class="math inline">\(Q_0 = \min(X)\)</span> e <span class="math inline">\(Q_4 = \max(X)\)</span></li>
+</ul>
+</section>
+<section id="o-que-são-percentis" class="slide level2">
+<h2>O que são Percentis?</h2>
+<ul>
+<li class="fragment"><p>Analogamente aos quartis, os percentis são:</p>
+<ul>
+<li class="fragment"><span class="math display">\[\mathbb P(X &lt; P_K) \leq k/100, \, \mathbb P(X &gt; P_K) \leq 1 - k/100 \, k = 1, 2, \ldots, 99\]</span></li>
+</ul></li>
+<li class="fragment"><p>Também pode-se dizer que <span class="math inline">\(P_0 = \min(X)\)</span> e <span class="math inline">\(P_{100} = \max(X)\)</span></p></li>
+<li class="fragment"><p>Também é possível definir <em>Tercis</em>, <em>Quintis</em>, e assim por diante!</p>
+<ul>
+<li class="fragment">Tercis:
+<ul>
+<li class="fragment"><span class="math display">\[\mathbb P(X &lt; T_K) \leq k/3, \, \mathbb P(X &gt; T_K) \leq 1 - k/3, \, k = 1, 2\]</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="histograma" class="slide level2">
+<h2>Histograma</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
+<section id="histograma-1" class="slide level2">
+<h2>Histograma</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
+<section id="histograma-2" class="slide level2">
+<h2>Histograma</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
+<section id="histograma-3" class="slide level2">
+<h2>Histograma</h2>
+
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-32-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="análises-de-regressão" class="title-slide slide level1 center">
+<h1>Análises de Regressão</h1>
+
+</section>
+<section id="análise-com-preços-totais" class="slide level2">
+<h2>Análise com preços totais</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="fu">plot</span>(price <span class="sc">~</span> area, <span class="at">data =</span> hprice3)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"></section>
+<section id="análise-com-preços-totais-1" class="slide level2">
+<h2>Análise com preços totais</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">plot</span>(price <span class="sc">~</span> area, <span class="at">data =</span> hprice3)</span>
+<span id="cb32-2"><a href=""></a><span class="fu">abline</span>(<span class="fu">lm</span>(price <span class="sc">~</span> area, <span class="at">data =</span> hprice3), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment"><span class="math inline">\(R^2 = 0,41\)</span></li>
+</ul>
+</section>
+<section id="análise-com-preços-unitários" class="slide level2">
+<h2>Análise com preços unitários</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>hprice3 <span class="ot">&lt;-</span> <span class="fu">within</span>(hprice3, PU <span class="ot">&lt;-</span> price<span class="sc">/</span>area)</span>
+<span id="cb33-2"><a href=""></a><span class="fu">plot</span>(PU <span class="sc">~</span> area, <span class="at">data =</span> hprice3)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
+<section id="análise-com-preços-unitários-1" class="slide level2">
+<h2>Análise com preços unitários</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">plot</span>(PU <span class="sc">~</span> area, <span class="at">data =</span> hprice3)</span>
+<span id="cb34-2"><a href=""></a><span class="fu">abline</span>(<span class="fu">lm</span>(PU <span class="sc">~</span> area, <span class="at">data =</span> hprice3), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment"><span class="math inline">\(R^2 = 0,015\)</span></li>
+</ul>
+</section>
+<section id="análise-com-preços-unitários-2" class="slide level2">
+<h2>Análise com preços unitários</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>hprice3 <span class="ot">&lt;-</span> <span class="fu">within</span>(hprice3, PU <span class="ot">&lt;-</span> price<span class="sc">/</span>land)</span>
+<span id="cb35-2"><a href=""></a><span class="fu">plot</span>(PU <span class="sc">~</span> land, <span class="at">data =</span> hprice3)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"></section>
+<section id="análise-com-preços-unitários-3" class="slide level2">
+<h2>Análise com preços unitários</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">plot</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(land), <span class="at">data =</span> hprice3)</span>
+<span id="cb36-2"><a href=""></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(land), <span class="at">data =</span> hprice3), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_01_files/figure-revealjs/unnamed-chunk-38-1.png" width="960" class="r-stretch"></section>
+<section id="estatísticas-dos-coeficientes" class="slide level2">
+<h2>Estatísticas dos coeficientes</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(PU) ~ log(land), data = hprice3)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.16788 -0.26037 -0.03899  0.28270  1.02910 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   8.6955     0.2780   31.28   &lt;2e-16 ***
+log(land)    -0.7396     0.0269  -27.49   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3858 on 319 degrees of freedom
+Multiple R-squared:  0.7032,    Adjusted R-squared:  0.7023 
+F-statistic: 755.8 on 1 and 319 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Com apenas uma variável, 70% de poder de explicação!</li>
+</ul>
+</section>
+<section id="soma-de-efeitos" class="slide level2">
+<h2>Soma de efeitos</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(PU) ~ log(land) + log(area), data = hprice3)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.20114 -0.18050 -0.02436  0.23762  0.75368 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  4.48864    0.40045   11.21   &lt;2e-16 ***
+log(land)   -0.85706    0.02378  -36.03   &lt;2e-16 ***
+log(area)    0.71302    0.05597   12.74   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3144 on 318 degrees of freedom
+Multiple R-squared:  0.8035,    Adjusted R-squared:  0.8023 
+F-statistic: 650.1 on 2 and 318 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">A segunda variável acrescenta 10 p.p. em poder de explicação!</li>
+</ul>
+</section>
+<section id="soma-de-efeitos-2" class="slide level2">
+<h2>Soma de efeitos (2)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(PU) ~ log(land) + log(area) + age, data = hprice3)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.27363 -0.18649 -0.01256  0.20098  0.78489 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  5.0248911  0.3768540  13.334  &lt; 2e-16 ***
+log(land)   -0.9112903  0.0231436 -39.375  &lt; 2e-16 ***
+log(area)    0.7252967  0.0517281  14.021  &lt; 2e-16 ***
+age         -0.0039366  0.0005278  -7.458 8.46e-13 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2905 on 317 degrees of freedom
+Multiple R-squared:  0.8328,    Adjusted R-squared:  0.8312 
+F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section></section>
 <section id="referências" class="title-slide slide level1 smaller scrollable">
 <h1>Referências</h1>
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Edwards1974" class="csl-entry" role="listitem">
+Edwards, A. W. F. 1974. <span>“The <span>History</span> of <span>Likelihood</span>”</span>. <em>International Statistical Review / Revue Internationale de Statistique</em> 42 (1): 9–15. <a href="https://doi.org/10.2307/1402681">https://doi.org/10.2307/1402681</a>.
+</div>
 <div id="ref-feller" class="csl-entry" role="listitem">
 Feller, William. 1968. <em>An Introduction to Probability Theory and Its Applications</em>. 3º ed. Nova Iorque, EUA.: John Wiley &amp; Sons, Inc.
 </div>
@@ -696,7 +1671,7 @@ Matloff, Norman Saul. 2009. <em>From <span>A</span>lgorithms to <span>Z</span>-<
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -1061,6 +2036,7 @@ Matloff, Norman Saul. 2009. <em>From <span>A</span>lgorithms to <span>Z</span>-<
         }
       });
       </script>
+    <script>videojs(video_shortcode_videojs_video1);</script>
     
 
 </body></html>

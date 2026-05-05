@@ -10,11 +10,18 @@ format:
     theme: simple
     scrollable: true
     incremental: true
+    slide-number: true
 lang: pt-br
 toc: true
 toc-depth: 1
 bibliography: references.bib
+execute:
+  echo: false
+  message: false
+  warning: false
 ---
+
+
 
 # Probabilidade
 
@@ -30,8 +37,7 @@ bibliography: references.bib
   conjunto $\{ 1, 2 ,3, 4, 5, 6\}$  é:
     - $$\mathbb P(A) = \frac{1}{6}$$
     
-- Problema com esta definição: define probabilidade de um evento baseado na
-"chance"  que o evento ocorra.
+- Problema: define probabilidade como a "chance" que o evento ocorra.
   - A cobra come o rabo!
   
 ## Escola axiomática
@@ -58,7 +64,7 @@ list_venn <- list(Alto = sort(sample(1:100, 20)),
                   Centro = sort(sample(1:100, 20)),
                   Suburbio = sort(sample(1:100, 20)))
 library(ggvenn) 
-ggvenn(list_venn, c("Alto", "Centro"))  
+ggvenn(list_venn[c("Alto", "Centro")], c("Alto", "Centro"))  
 ```
 
     
@@ -172,7 +178,7 @@ densidade de probabildidade* (para as var. aleatórias contínuas) ou da
 sua *função massa de probabilidade* (para as var. aleatórias discretas)
   - Por exemplo: ao jogar um dado, qual a probabilidade de obter o número 6?
     - Distribuição de Bernoulli:
-      - $$\mathbb P(X = k) = p^k (1-p)^{1-k}$${#eq-Bernoulli}
+      - $$\mathbb P(X = k) = p^k (1-p)^{1-k}$$ {#eq-Bernoulli}
         - $k=0 \rightarrow  \text{insucesso!}$
         - $k=1 \rightarrow  \text{sucesso}!$
       - $S = \{1, 2, 3, 4, 5, 6\}$
@@ -326,9 +332,835 @@ mosaic::plotDist("norm", main = "Distribuição Normal Padrão",
 
 ## Um pouco de história
 
-![Aproximação Normal da Binomial](./img/Binomial_Normal_Approx.gif)
+![Aproximação Normal da Binomial (De Moivre, 1733)](./img/Binomial_Normal_Approx.gif)
 
-# Transformações de variáveis aleatórias  
+# Transformações lineares de v.a.
+
+- Pode-se efetuar uma transformação de uma var. aleatória $X$ assim:
+  - $$Y = h(Z) = aZ + b$$
+    - Estas transformações são chamadas de lineares
+  - Quando $Z$ é uma var. discreta:
+    - $$p_Y(y) = p_Z(h^{-1}(Y)) = p_Z\left (\frac{Y-b}{a} \right )$$
+  - Quando $Z$ é uma var. contínua:
+    - $$f_Y(y) = f_Z(g(y))\cdot \left | \frac{\mathrm d g(y)}{\mathrm d y}\right | = f_Z(g(y))\cdot |g'(y)|$${#eq-Jacobi}
+      - $g(Y) = h^{-1}(Y)$
+      - $|g'(y)|$ é o Jacobiano da transformação!
+      
+## Jacobiano de uma transformação linear
+
+![Jacobiano](./img/Jacobian.png)
+
+- Mantem-se o paralelismo. A área é modificada por uma constante ($\det J$)
+
+## Jacobiano de uma transformação linear
+
+{{< video img/Linear.mp4 width="900" height="600" >}}
+
+## Distribuição Normal
+
+- A partir da *Normal Padrão*, $\mathcal N(0,1)$, é possível obter qualquer 
+outra distribuição normal, $\mathcal N(\mu, \sigma^2)$)!
+  - Basta fazer:
+    - $Y = h(Z) = \sigma_Y Z + \mu_Y$
+    - $g(Y) = h^{-1}(Y) = \frac{Y-\mu_Y}{\sigma_Y}$ 
+    - $|g'(Y)| = |1/\sigma_Y|$
+
+- Como fica a equação da normal genérica:
+  - $f_Y(t) = f_Z \left (\frac{t - \mu_Y}{\sigma_Y}\right )\cdot | \frac{1}{\sigma_Y}|$
+  - $f_Y(t) = \frac{1}{\sqrt{2\pi}} e^{-\frac{(t-\mu_Y)^2}{2\sigma_Y^2}}\cdot | \frac{1}{\sigma_Y} |$
+  - $f_Y(t) = \frac{1}{\sigma_Y\sqrt{2\pi}} e^{-\frac{(t-\mu_Y)^2}{2\sigma_Y^2}}$
+  
+## Distribuição Normal
+
+- $$f(t) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(t-\mu)^2}{2\sigma^2}},\, \text{para }-\infty<t<\infty$${#eq-Normal}
+
+- Nos referiremos a uma var. aleatória $X$ com distribuição normal genérica como 
+a da @eq-Normal assim:
+  - $X \sim \mathcal N(\mu, \sigma^2)$
+  
+- Percebam:
+  - $\mu$ é um parâmetro que muda a *posição* da distribuição!
+  - $\sigma$ é um parâmetro que muda a *escala* da distribuição!
+  
+## Distribuição Normal
+
+- O contrário também é verdadeiro:
+  - É possível obter a *Normal Padrão* a partir de uma distribuição normal
+  qualquer!
+  - Basta fazer:
+    $$Z = \frac{Y - \mu_Y}{\sigma_Y}$$
+    
+- Exemplo:
+  - Se $Y \sim \mathcal N(100, 10^2)$
+    - A quantos desvios-padrões de distância se encontra o valor 125? Qual a
+    probabilidade de ocorrência de valores iguais ou maiores do que ele?
+      - $$Z = (125 - 100)/10 =2,5$$
+        - o desvio se encontra a 2,5DP de distância da média
+        
+## Distribuição Normal
+
+- Probabilidade de ocorrências de valores iguais ou maiores:
+  - Tabela de Escores-Z!
+    - $\mathbb P(Z \geq 2,5) = 1 - 0,99379 = 0,00621 = 0,62\%$
+          
+- No R:
+
+. . . 
+
+```{r}
+#| echo: true
+1 - pnorm(2.5)
+```
+
+- Ou:
+
+. . . 
+
+```{r}
+#| echo: true
+1 - pnorm(125, mean = 100, sd = 10)
+```
+
+## Distribuição Normal
+
+```{r}
+#| label: fig-Normal
+#| fig-cap: "Distribuição Normal $\\mathcal N(100, 10^2)$ ($\\mu = 100,\\, \\sigma = 10$)."
+mosaic::plotDist("norm", params = c(100, 10), main = "Distribuição Normal",
+                 xlab = "t", ylab = expression(~f[X](t)))
+```
+
+## Equivalência
+
+- Se uma variável aleatória $\mathbf X$ que armazena as temperaturas médias 
+diárias de uma determinada localidade, em ºF, de forma que
+$\mathbf X \sim \mathcal N(95, 9^2)$
+
+- Então uma variável $\mathbf Y$ que é a transformação linear de $\mathbf X$ 
+conforme a @eq-Fahrenheit:
+  - $$Y = \frac{X - 32}{9/5}$${#eq-Fahrenheit}
+  - Deverá representar as mesmas probabilidades do fenômeno físico, porém numa 
+  escala diferente (no caso, a escala Celsius)!
+  
+- Na escala Celsius, a variável apresentará distribuição normal, porém com média
+35ºC e desvio-padrão igual 5,0 ºC!
+  - Ou seja, $\mathbf Y \sim \mathcal N(35, 5^2)$
+  
+## Equivalência
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- $\mathbf X \sim \mathcal N(95, 9^2)$
+
+- A dois desvios-padrões de distância da média da variável $\mathbf X$ está a
+temperatura $95 + 2\cdot9 = 113 ^{\circ}\text{F}$
+:::
+
+::: {.column width="50%"}
+
+- $\mathbf Y \sim \mathcal N(35, 5^2)$
+
+- A dois desvios-padrões de distância da média da variável $\mathbf Y$ 
+encontra-se a temperatura $35+2\cdot 5 = 45 ^{\circ}\text{C}$
+:::
+::::
+
+
+- $^{\circ}\text{C} = \frac{113-32}{9/5} = 45$
+
+- A prob. de que a temp. média diária nessa localidade seja maior 
+do que 45ºC
+  - É igual à prob. de que a temp. média diária nesse local seja maior do que 113ºF!
+  
+. . .   
+  
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+1-pnorm(113, mean = 95, sd = 9)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: true
+1-pnorm(45, mean = 35, sd = 5)
+```
+
+:::
+::::
+  
+- Que é também a prob. de que a variável $\mathbf Z \sim \mathcal N(0,1)$ seja 
+maior do que 2,0:
+
+. . . 
+
+```{r}
+#| echo: true
+1-pnorm(2)
+```
+
+## Extendendo para outras dimensões
+
+```{r}
+library(mnormt)
+
+# Define parameters: mean vector (mu) and covariance matrix (sigma)
+mu <- c(0, 0)
+sigma <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
+
+# Create a grid for the x and y axes
+x <- seq(-3, 3, length.out = 50)
+y <- seq(-3, 3, length.out = 50)
+
+# Calculate the density (z) over the grid
+f <- function(x, y) dmnorm(cbind(x, y), mu, sigma)
+z <- outer(x, y, f)
+
+# Create the 3D plot
+persp(x, y, z, theta = 30, phi = 30, col = "lightblue", shade = 0.25,
+      main = "3D Bivariate Normal Distribution")
+```
+
+- São duas v.a.: $\bf X \sim \mathcal N (\mu_x, \sigma^2_x) \text{ e } \bf Y \sim N (\mu_y, \sigma^2_y)$
+- Um parâmetro, $\rho$, controla o grau de associação ou correlação entre $\bf X$
+e $\bf Y$.
+
+## Extendendo para outras dimensões
+
+```{r}
+library(ggplot2)
+library(ggExtra)
+library(MASS)
+Sigma <- matrix(c(10, 0, 0, 2), nrow = 2, ncol = 2)
+# Sigma
+m <- mvrnorm(n = 1000, rep(0,2),Sigma)
+m <- as.data.frame(m)
+# str(m)
+p <- ggplot(m, aes(x = V1, y = V2)) +
+  geom_point(alpha = .2) +
+  geom_density_2d() +
+  theme_bw() +
+  labs(title = "Normal Multivariada", 
+       subtitle = expression(~rho == 0))
+# marginal density
+ggMarginal(p, type="density")
+```
+
+## Extendendo para outras dimensões
+
+```{r}
+Sigma <- matrix(c(10, 2.25, 2.25, 2), nrow = 2, ncol = 2)
+# Sigma
+m <- mvrnorm(n = 1000, mu = rep(0,2), Sigma = Sigma)
+m <- as.data.frame(m)
+# str(m)
+p <- ggplot(m, aes(x = V1, y = V2)) +
+  geom_point(alpha = .2) +
+  geom_density_2d() +
+  theme_bw() +
+  labs(title = "Normal Multivariada", 
+       subtitle = expression(~rho == 0.5))
+# marginal density
+ggMarginal(p, type="density")
+```
+
+## Extendendo para outras dimensões
+
+```{r}
+Sigma <- matrix(c(10, 4, 4, 2), nrow = 2, ncol = 2)
+# Sigma
+m <- mvrnorm(n = 1000, mu = rep(0,2), Sigma = Sigma)
+m <- as.data.frame(m)
+# str(m)
+p <- ggplot(m, aes(x = V1, y = V2)) +
+  geom_point(alpha = .2) +
+  geom_density_2d() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  labs(title = "Normal Multivariada", 
+       subtitle = expression(~rho == 0.9))
+# marginal density
+ggMarginal(p, type="density")
+```
+
+- A reta de regressão é o lugar geométrico das tangentes verticais das elipses
+
+## Aparte: Galton e a primeira regressão
+
+```{r}
+knitr::include_graphics("./img/Galtons_correlation_diagram_1875.jpg")
+```
+
+## Aparte: Galton e a primeira regressão (2)
+
+```{r}
+knitr::include_graphics("./img/Galton_Regression.webp")
+```
+
+## Extendendo para outras dimensões
+
+```{r}
+Sigma <- matrix(c(10, sqrt(20), sqrt(20), 2), nrow = 2, ncol = 2)
+# Sigma
+m <- mvrnorm(n = 1000, mu = rep(0,2), Sigma = Sigma)
+m <- as.data.frame(m)
+# str(m)
+p <- ggplot(m, aes(x = V1, y = V2)) +
+  geom_point(alpha = .2) +
+  geom_density_2d() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  labs(title = "Normal Multivariada", 
+       subtitle = expression(~rho == 1.0))
+# marginal density
+ggMarginal(p, type="density")
+```
+
+- No limite ($\rho = 1$), o modelo se degenera para um modelo determinístico.
+
+# Regressão Linear Ordinária
+
+## Regressão Linear Simples
+
+```{r}
+#| echo: true
+library(wooldridge)
+data(hprice1)
+plot(price ~ sqrft, data = hprice1)
+```
+
+## Regressão Linear Simples
+
+```{r}
+#| echo: true
+plot(price ~ sqrft, data = hprice1)
+abline(lm(price ~ sqrft, data = hprice1), col = "red", lty = 2)
+```
+
+## Regressão Linear Simples
+
+```{r}
+#| echo: true
+plot(price ~ I(sqrft*0.092903), data = hprice1)
+abline(lm(price ~ I(sqrft*0.092903), data = hprice1), col = "red", lty = 2)
+```
+
+## Regressão Linear Simples: interpretação
+
+```{r}
+#| echo: true
+summary(lm(price ~ I(sqrft*0.092903), data = hprice1))
+```
+
+- Para cada metro quadrado adicional, o preço dos imóveis aumenta US$ 1.500,00.
+
+## Regressão Linear Simples: interpretação
+
+```{r}
+#| echo: true
+summary(lm(price ~ I(sqrft*0.092903 - 100), data = hprice1))
+```
+
+- Uma casa com 100 $m^2$ vale, **em média**, US$ 162.000,00.
+
+## Regressão Linear Múltipla
+
+- Na regressão linear simples:
+  - $$y = \alpha + \beta x + \varepsilon$$ {#eq-RLS}
+  - $\varepsilon \sim \mathcal N(0, \sigma_e^2)$
+
+- Na regressão linear múltipla:
+  - $$y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \ldots + \beta_k x_k + \varepsilon$$ {#eq-RLM}
+  - $\varepsilon \sim \mathcal N(0, \sigma_e^2)$
+  
+## Regressão Linear Múltipla
+
+```{r}
+#| echo: true
+summary(lm(price ~ I(sqrft*0.092903 - 100) + I(bdrms - 1), data = hprice1))
+```
+
+- Interpretação: 
+  - uma casa com um quarto e 100 $m^2$ vale, em média, US$ 134.000,00;
+  - cada $m^2$ adicional aumenta o valor da casa em US$ 1.382,50;
+  - cada quarto adicional aumenta o valor da casa em US$ 15.200,00.
+
+## Regressão Linear Múltipla
+
+```{r}
+#| echo: true
+summary(lm(price ~ I(sqrft*0.092903 - 100) + I(bdrms - 1) + I(lotsize), data = hprice1))
+```
+
+
+
+# Estimação de parâmetros
+
+## Máxima Verossimilhança
+
+- A estimação dos parâmetros de uma distribuição normal pode ser feita por
+**máxima verossimilhança**.
+
+. . .  
+  
+> within the framework of a statistical model, a particular set of data 
+supports one statistical hypothesis better than another if the likelihood of the
+first hypothesis, [given] the data, exceeds the likelihood of the second 
+hypothesis [@Edwards1974, p. 30].
+
+. . . 
+
+- $$L(\mu, \sigma^2 | x_1, x_2, \ldots, x_n) = \prod_{i=1}^n  \frac{1}{\sqrt{2\pi\sigma^2}}e^{-(x_i-\mu)^2/2\sigma^2}$$ {#eq-likelihood}
+
+- Procura-se $\mu$ e $\sigma^2$ que maximizam a @eq-likelihood.
+
+## Máxima Verossimilhança
+
+- É mais fácil computacionalmente maximizar $\ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n))$:
+  - $$\ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n) = \ln (L(\mu, \sigma^2 | x_1, x_2, \ldots, x_n))$$ {#eq-loglikelihood}
+
+- Então:
+  - $$
+    \begin{align*}
+    \ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n) &= -\frac{n}{2} \ln(2\pi) - n \ln(\pi) - \frac{(x_1 - \mu)^2}{2\sigma^2} - \\
+    &\frac{(x_2 - \mu)^2}{2\sigma^2} - \ldots - \frac{(x_n - \mu)^2}{2\sigma^2}
+    \end{align*}
+    $$
+    
+## Máxima Verossimilhança
+
+- O processo de maximização consiste em fazer:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- $$\frac{\partial \ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n)}{\partial \mu} = 0$$
+- $$\hat \mu = \frac{(x_1 + \ldots + x_n)}{n}$$
+:::
+
+::: {.column width="50%"}
+- $$\frac{\partial \ell(\mu, \sigma^2 | x_1, x_2, \ldots, x_n)}{\partial \sigma} = 0$$
+- $$\hat \sigma = \sqrt{\frac{(x_1 - \mu)^2 + \ldots + (x_n - \mu)^2}{n}}$$
+:::
+
+::::    
+
+- Em suma, a média amostral é o estimador de máxima verossimilhança para $\mu$ e
+o desvio-padrão amostral é o estimador de máxima verossimilhança para o 
+parâmetro $\sigma$.
+
+- Ver [link](https://youtu.be/Dn6b9fCIUpM?si=53TEm8EKX1-TzzQw) para uma 
+explicação detalhada
+
+## Estimação na regressão linear
+
+- A regressão linear consiste na **minimização dos resíduos quadráticos**:
+  - $$\min \sum_{i=1}^n \epsilon_i^2$$ {#eq-OLS}
+  
+- O resíduo é a diferença entre o valor observado e o valor estimado pelo modelo:
+  - Ou seja, pode-se escrever a @eq-OLS como:
+    - $$\beta_{OLS} = $$
+
+
+## Lei dos Grandes Números (LGN)
+
+- Está na raiz do nascimento da Teoria das Probabilidades a Lei *Fraca* dos
+Grandes Números!
+  
+- Teorema 3.1 (A Lei Fraca dos Grandes Números). Seja $X_1, \ldots , X_n$ 
+variáveis aleatórias independentes e identicamente distribuídas com valor 
+esperado $\mathbb E(X_i) = \mu$ e variância finita $\mathbb V(X_i) < \infty$,
+para $i = 1, \ldots, n$. A média amostral é definida como:
+
+. . . 
+
+$$\overline X_n = \frac{1}{n}\sum_{i=1}^n = X_i$$
+
+Então, para qualquer número positivo $\epsilon > 0$, a probabilidade que a 
+diferença entre a média amostral e o valor esperado $\mu$ seja menor do que 
+$\epsilon$ vai se aproximar de 1, à medida que o tamanho da amostra se aproxima 
+de infinito:
+
+. . .
+
+
+$$\lim_{n \rightarrow \infty} = \mathbb P (|\overline X_n - \mu| < \epsilon) = 1$$
+
+## Distribuição de Cauchy Padrão
+
+- A distribuição de *Cauchy Padrão* tem *função densidade de probabilidade* (*fdp*):
+  - $$f_X(t) = \frac{1}{\pi}\cdot \left ( \frac{1}{1+t^2}\right)$${#eq-StdCauchy}
+  
+- A distribuição de Cauchy genérica tem *fdp*:
+  - $$f_X(t) = \frac{1}{\pi\gamma}\left ( \frac{1}{1+\left (\frac{t-t_0}{\gamma} \right )^2}\right)$${#eq-Cauchy}
+    - A @eq-Cauchy é obtida através da transformação linear da @eq-StdCauchy:
+      - $t_0$ é um parâmetro de posição
+      - $\gamma$ é um parâmetro de escala
+
+- A distribuição de Cauchy não apresenta média nem variância finitas!
+  
+## Distribuição de Cauchy
+
+```{r}
+#| fig-label: fig-Cauchy
+#| fig-cap: Distr. de Cauchy Padrão (em vermelho) vs. Distr. Normal Padrão (em azul)
+#| fig-keep: last
+mosaic::plotDist("norm")
+mosaic::plotDist("cauchy", add = T, col = "red")
+```
+
+- A distribuição de Cauchy possui caudas mais pesadas do que a distribuição normal!
+
+
+## LGN
+
+::: {#fig-LLN layout-ncol="2"}
+```{r}
+#| label: fig-LLNa
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Normal Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(1)
+m = 
+v <- list()
+for (i in 1:1000) {
+  x <- rnorm(i, mean = 0, sd = 1)
+  v[[i]] <- mean(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v, xlab = "n", ylab = "Média amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+```{r}
+#| label: fig-LLNb
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Cauchy Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(2)
+v1 <- list()
+for (i in 1:1000) {
+  x <- rcauchy(i, location = 0, scale = 1)
+  v1[[i]] <- mean(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v1, xlab = "n", ylab = "Média amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+Lei dos Grandes Números
+:::
+
+## Como estimar o parâmetro da Cauchy?
+
+- Se a média amostral não é consistente para estimar o parâmetro de posição da
+Distribuição de Cauchy, como fazê-lo?
+  - A questão é que alguns poucos dados extremos da amostra desestabilizam a
+  média amostral!
+  - Precisa-se, portanto, de um estimador robusto a *outliers*!
+    - É natural pensar na mediana!
+    - Porém, há outras possibilidades, como a média aparada!
+    
+## LGN - mediana
+
+::: {#fig-LLN2 layout-ncol="2"}
+
+```{r}
+#| label: fig-LLN2a
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Normal Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(1)
+m = 
+v <- list()
+for (i in 1:1000) {
+  x <- rnorm(i, mean = 0, sd = 1)
+  v[[i]] <- median(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v, xlab = "n", ylab = "Mediana amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+```{r}
+#| label: fig-LLN2b
+#| fig-cap: "Estimativa do parâmetro de posição para a dist. Cauchy Padrão."
+#| fig-height: 4.5
+#| fig-width: 4.5
+
+set.seed(2)
+v1 <- list()
+for (i in 1:1000) {
+  x <- rcauchy(i, location = 0, scale = 1)
+  v1[[i]] <- median(x)
+}
+par(mar = c(4, 4, .5, 1))
+plot(1:1000, v1, xlab = "n", ylab = "Mediana amostral", type = "l")
+abline(h = 0, col = "red", lwd = 2)
+```
+
+Lei dos Grandes Números - mediana
+:::
+    
+
+# Transformações não-lineares de v.a.
+
+- Também podemos utilizar funções $h(X)$ não-lineares para transformar variáveis
+aleatórias
+  - Por exemplo: $Y = h(Z) = Z^2$
+    - A variável $Y$ obtida com a elevação ao quadrado de uma var. com dist. 
+    normal padrão tem distribuição dita $\chi^2_{(1)}$
+      - $$f_Y(t) = \begin{cases}
+      \frac{1}{\sqrt{2\pi t}} e^{-\frac{t}{2}} & \text { se } t> 0 \\
+      0 & \text{ se } t \leq 0
+      \end{cases}$$
+  
+- Uma medida da *dispersão* amostral, denominada *variância* é:
+  - $$\mathbb V(X) = \frac{1}{n}\sum_{i = 1}^{n} (X_i - \mu)^2$${#eq-Variance}
+    - É fácil notar que $Y = \mathbb V(X) \sim \chi^2_{(1)}$
+    
+## Distribuição $\chi^2_{(1)}$
+
+```{r}
+#| echo: true
+#| label: fig-chiSquared
+#| fig-cap: "Distribuição $\\chi^2$ com 1 grau de liberdade."
+#| fig-height: 4
+#| fig-width: 7
+plotDist('chisq', params = list(df = 1), ylim = c(0, 1),
+         main = expression("Distribuição" ~chi[(1)]^2),
+         xlab = "t", ylab = expression(f[Y](t) == Z^2))
+```
+
+- $\mathbb E(Y) = 1$ (variância da distribuição normal padrão é igual a 1!)
+
+
+## Transformações não-lineares
+
+- Seja $Z$ uma variável com distribuição normal padrão
+  - Seja $\mu$ e $\sigma>0$ dois números reais
+    - Então $$X = e^{\mu + \sigma Z}$${#eq-TransfLognormal}
+      - tem distribuição dita lognormal!
+
+- Inversamente, se $X$ é uma variável com distribuição lognormal
+  - Então $Y = \ln(X)$ 
+    - É uma variável com distribuição normal!
+
+- A distribuição lognormal tem *fdp*:
+  - $$f_X(t) = \frac{1}{t\sigma\sqrt{2\pi}}\exp\left (-\frac{(\ln(t) - \mu)^2}{2\sigma^2} \right)$${#eq-Lognormal}
+  
+## Distribuição Lognormal
+
+```{r}
+#| echo: true
+#| label: fig-Lognormal
+#| fig-cap: "Distribuição Lognormal"
+mosaic::plotDist("lnorm", params = list(meanlog = 0, sdlog = 0.25),
+                 main = "Distribuição Lognormal",
+                 xlab = "t", ylab = expression(f[Y](t) == e^{0.25*Z}))
+```
+
+
+```{r}
+#| eval: false
+library(EnvStats)
+mosaic::plotDist("lnormAlt", params = list(mean = 1, cv = .25),
+                 main = "Distribuição Lognormal")
+```
+
+## Distribuição Lognormal
+
+```{r}
+#| echo: true
+#| label: fig-Lognormal2
+#| fig-cap: "Distribuição Lognormal ($\\mu^* = 5000$)"
+mosaic::plotDist("lnorm", params = list(meanlog = log(5000), sdlog = 0.25),
+                 main = "Distribuição Lognormal",
+                 xlab = "t", 
+                 ylab = expression(f[Y](t) == e^{0.25*Z~+~plain(ln)~5000})
+                 )
+```
+
+## Distribuição Lognormal
+
+### Estimação de parâmetros
+
+- Os parãmetros da distribuição lognormal podem ser assim estimados:
+  - $$\hat \mu = \frac{1}{n} \sum_{i=1}^n \ln(X_i)$$
+  - $$\hat \sigma^2 = \frac{1}{n} \sum_{i=1}^n (\ln(X_i)-\hat\mu)^2$$
+
+# Aplicações
+
+## Casas nos EUA
+
+```{r}
+#| echo: true
+library(wooldridge)
+data(hprice3)
+head(hprice3, n = 10)
+```
+
+
+## Análise Exploratória
+
+### Diagramas de Caixa
+
+```{r}
+#| echo: true
+boxplot(hprice3$price, horizontal = T)
+```
+
+## Análise Exploratória
+
+![Como é construído um Diagrama de Caixa](./img/boxplot_1.png)
+
+
+## Os cinco números de Tukey
+
+- O famoso estatístico John Tukey, em sua obra clássica, *Exploratory Data
+Analysis*, sugeriu os diagramas de caixa para ilustrar rapidamente os cinco
+números que considerava sugestivos da amostra:
+  - Valor Mínimo
+  - Primeiro Quartil
+  - Segundo Quartil ou Mediana
+  - Terceiro Quartil
+  - Valor Máximo
+  
+## O que são Quartis?
+
+- Para uma variável aleatória $X = X_1, X_2, \ldots, X_n$, o k-ésimo quartil,
+$Q_k$, é definido como o valor que separa a amostra em dois subconjuntos tal que
+(Moors 1988, 25):
+  - $$\mathbb P(X < Q_K) \leq k/4, \, \mathbb P(X > Q_K) \leq 1 - k/4, \, k = 1, 2, 3$$ 
+
+- Também pode-se dizer, mas é menos comum, que $Q_0 = \min(X)$ e $Q_4 = \max(X)$
+
+## O que são Percentis?
+
+- Analogamente aos quartis, os percentis são:
+  - $$\mathbb P(X < P_K) \leq k/100, \, \mathbb P(X > P_K) \leq 1 - k/100 \, k = 1, 2, \ldots, 99$$ 
+
+- Também pode-se dizer que $P_0 = \min(X)$ e $P_{100} = \max(X)$
+
+- Também é possível definir *Tercis*, *Quintis*, e assim por diante!
+  - Tercis:
+    - $$\mathbb P(X < T_K) \leq k/3, \, \mathbb P(X > T_K) \leq 1 - k/3, \, k = 1, 2$$
+    
+## Histograma
+
+```{r}
+hist(hprice3$price)
+```
+
+## Histograma
+
+```{r}
+hist(hprice3$land)
+```
+
+## Histograma
+
+```{r}
+hist(log(hprice3$price))
+```
+
+## Histograma
+
+```{r}
+hist(log(hprice3$land))
+```
+
+# Análises de Regressão
+
+## Análise com preços totais
+
+```{r}
+#| echo: true
+plot(price ~ area, data = hprice3)
+```
+
+## Análise com preços totais
+
+```{r}
+#| echo: true
+plot(price ~ area, data = hprice3)
+abline(lm(price ~ area, data = hprice3), col = "red", lty = 2)
+```
+
+- $R^2 = 0,41$
+
+## Análise com preços unitários
+
+```{r}
+#| echo: true
+hprice3 <- within(hprice3, PU <- price/area)
+plot(PU ~ area, data = hprice3)
+```
+
+## Análise com preços unitários
+
+```{r}
+#| echo: true
+plot(PU ~ area, data = hprice3)
+abline(lm(PU ~ area, data = hprice3), col = "red", lty = 2)
+```
+
+- $R^2 = 0,015$
+
+## Análise com preços unitários
+
+```{r}
+#| echo: true
+hprice3 <- within(hprice3, PU <- price/land)
+plot(PU ~ land, data = hprice3)
+```
+
+## Análise com preços unitários
+
+```{r}
+#| echo: true
+plot(log(PU) ~ log(land), data = hprice3)
+abline(lm(log(PU) ~ log(land), data = hprice3), col = "red", lty = 2)
+```
+
+## Estatísticas dos coeficientes
+
+```{r}
+fit <- lm(log(PU) ~ log(land), data = hprice3)
+summary(fit)
+```
+
+- Com apenas uma variável, 70% de poder de explicação!
+
+## Soma de efeitos
+
+```{r}
+fit1 <- update(fit, .~ . + log(area), data = hprice3)
+summary(fit1)
+```
+
+- A segunda variável acrescenta 10 p.p. em poder de explicação!
+
+## Soma de efeitos (2)
+
+```{r}
+fit2 <- update(fit1, .~. + age)
+summary(fit2)
+```
+
+
+
 
 # Referências
   
