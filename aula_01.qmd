@@ -21,6 +21,9 @@ execute:
   warning: false
 ---
 
+```{r}
+library(appraiseR)
+```
 
 
 # Probabilidade
@@ -400,7 +403,7 @@ a da @eq-Normal assim:
 ## Distribuição Normal
 
 - Probabilidade de ocorrências de valores iguais ou maiores:
-  - Tabela de Escores-Z!
+  - [Tabela de Escores-Z](https://www.dummies.com/article/academics-the-arts/math/statistics/how-to-find-probabilities-for-z-with-the-z-table-169599/)!
     - $\mathbb P(Z \geq 2,5) = 1 - 0,99379 = 0,00621 = 0,62\%$
           
 - No R:
@@ -762,12 +765,33 @@ explicação detalhada
 
 ## Estimação na regressão linear
 
-- A regressão linear consiste na **minimização dos resíduos quadráticos**:
-  - $$\min \sum_{i=1}^n \epsilon_i^2$$ {#eq-OLS}
+- Para a regressão linear também poderia ser utilizado o método da máxima
+verossimilhança (ver [link](https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood))
+
+- No entanto, é mais intuitivo pensar a regressão linear como a 
+**minimização dos resíduos quadráticos**:
+  - $$\min Z = \sum_{i=1}^n \epsilon_i^2$$ {#eq-OLS}
   
 - O resíduo é a diferença entre o valor observado e o valor estimado pelo modelo:
   - Ou seja, pode-se escrever a @eq-OLS como:
-    - $$\beta_{OLS} = $$
+    - $$\arg\min\limits_{\alpha, \beta} Z = \sum_{i=1}^n [y - (\alpha - \beta x)]^2$$
+
+## Estimação na regressão linear
+
+- $$\frac{\partial Z}{\partial \beta} = 0; \frac{\partial Z}{\partial \alpha} = 0$$
+
+- Chega-se a um sistema com duas equações e duas incógnitas, com a seguinte 
+solução:
+  - $$\hat \beta = \frac{\sum (x_i - \bar x)(y_i - \bar y)}{\sum(x_i - \bar x)^2}$$ {#eq-beta}
+  - $$\hat \alpha = \bar y - \hat \beta \bar x$$ {#eq-alpha}
+  
+```{r}
+#| eval: false
+# - $$\hat \alpha = \frac{\sum x^2 \sum y - \sum x \sum xy}{n\sum x^2 - (\sum x)^2}$$ {#eq-alpha}
+# - $$\hat \beta = \frac{n\sum xy - \sum x \sum y}{n\sum x^2 - (\sum x)^2}$$ {#eq-beta}
+```
+  
+  
 
 
 ## Lei dos Grandes Números (LGN)
@@ -1122,7 +1146,9 @@ abline(lm(PU ~ area, data = hprice3), col = "red", lty = 2)
 
 ```{r}
 #| echo: true
-hprice3 <- within(hprice3, PU <- price/land)
+hprice3 <- within(hprice3, {
+  PU <- price/land
+})
 plot(PU ~ land, data = hprice3)
 ```
 
@@ -1159,8 +1185,39 @@ fit2 <- update(fit1, .~. + age)
 summary(fit2)
 ```
 
+## Modelo Final
 
+- Para definição do modelo final, precisamos definir as características do
+imóvel padrão
+  - área do terreno (moda): `r brf(collapse::fmode(hprice3$land))` sq. ft. (1 acre $\approx$ 4.047 m2)
+  - área construída (moda): `r brf(collapse::fmode(hprice3$area))` sq. ft. ($\approx$ 230 m2)
+  
+. . . 
 
+```{r}
+library(car)
+FinalFit <- lm(log(PU) ~ log(land/43560) + log(area/2464) + age, data = hprice3)
+S(FinalFit)
+```
+ 
+## Equações de regressão e de estimação
+
+- **Equação de regressão**:
+  - $$
+    \begin{align*}
+    \ln (\text{PU}) &= 0,95 - 0,91\cdot \ln(\text{land}/43560) + \\
+    &0,725 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \varepsilon
+    \end{align*}
+    $$ {#eq-EqReg}
+
+- **Equação de estimação**:
+  - Para a equação de estimação, deve-se exponenciar a @eq-EqReg:
+  - $$
+    \begin{align*}
+    \text{PU} &= \exp(0,95 - 0,91\cdot \ln(\text{land}/43560) + \\
+    &0,725 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \varepsilon)
+    \end{align*}
+    $$ {#eq-EqEst}
 
 # Referências
   
