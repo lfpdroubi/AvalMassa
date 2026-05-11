@@ -94,7 +94,27 @@
     code span.va { color: #111111; } /* Variable */
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="aula_02_files/libs/revealjs/dist/theme/quarto-07e0c9be8415ecd45cc2cc23ff0a23ea.css">
   <link href="aula_02_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="aula_02_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -675,13 +695,54 @@ F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16
 </section>
 <section id="geração-de-superfícies-de-valores-2" class="slide level2">
 <h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/IDW-3Points.png" class="r-stretch quarto-figure-center"><p class="caption">Inverse Distance Weighting</p></section>
+<section id="geração-de-superfícies-de-valores-3" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/IDW-Buffer-425x213.png" class="r-stretch quarto-figure-center"><p class="caption">Buffer: somente pontos dentro do buffer serão utilizados na interpolação</p></section>
+<section id="geração-de-superfícies-de-valores-4" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/IDW-Barrier-425x213.png" class="r-stretch quarto-figure-center"><p class="caption">Barreiras físicas</p></section>
+<section id="geração-de-superfícies-de-valores-5" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
 <ul>
-<li class="fragment">IDW: na</li>
+<li class="fragment"><p>Segundo <span class="citation" data-cites="Embrapa2004">Druck et al. (<a href="#/referências" role="doc-biblioref" onclick="">2004, 83</a>)</span>, “uma alternativa simples para gerar uma superfície bidimensional” consiste em ajustar uma função bidimensional sobre as amostras, prevendo valores em uma grade (<span class="math inline">\(\hat{z}_i\)</span>), com a seguinte formulação:</p></li>
+<li class="fragment"><p><span id="eq-IDW"><span class="math display">\[
+\hat{z}_{i} = \frac{\sum_{j = 1}^n w_{ij}z_j}{\sum_{j=1}^n w_{ij}}
+\tag{7}\]</span></span></p></li>
+<li class="fragment"><p>Em que os pesos são computados segundo o inverso de uma potência <span class="math inline">\(k\)</span> das distâncias das amostras ao ponto de predição:</p>
+<ul>
+<li class="fragment"><span id="eq-IDW2"><span class="math display">\[
+w_{ij} = \frac{1}{d_{ij}^k}
+\tag{8}\]</span></span></li>
+</ul></li>
+<li class="fragment"><p>É um método extremamente simples e rápido para a obtenção de uma superfície de valores.</p></li>
+</ul>
+</section>
+<section id="geração-de-superfícies-de-valores-6" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/IDW-Power1-Surface-425x135.png" class="r-stretch quarto-figure-center"><p class="caption">Efeito do fator de potência. k = 1</p></section>
+<section id="geração-de-superfícies-de-valores-7" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/IDW-Power2-Surface-425x135.png" class="r-stretch quarto-figure-center"><p class="caption">Efeito do fator de potência. k = 2</p></section>
+<section id="geração-de-superfícies-de-valores-8" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+<ul>
+<li class="fragment">A Krigagem, por outro lado, é uma “técnica de estimação e predição de superfície baseada na modelagem da estrutura de correlação espacial” <span class="citation" data-cites="Embrapa2004">(@ <a href="#/referências" role="doc-biblioref" onclick="">Druck et al. 2004, 90</a>)</span>.</li>
 </ul>
 </section></section>
-<section id="referências" class="title-slide slide level1 center">
+<section id="referências" class="title-slide slide level1 smaller scrollable">
 <h1>Referências</h1>
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Embrapa2004" class="csl-entry" role="listitem">
+Druck, Suzana, Marília Sá Carvalho, Gilberto Câmara, e Antônio MIguel Vieira Monteiro, orgs. 2004. <em>Análise Espacial de Dados Geográficos</em>. Planaltina, DF: Embrapa Cerrados.
+</div>
+</div>
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">

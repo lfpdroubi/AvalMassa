@@ -342,7 +342,52 @@ unitários
   
 ## Geração de superfícies de valores
 
-- IDW: na
+![Inverse Distance Weighting](./img/IDW-3Points.png)
+
+## Geração de superfícies de valores
+
+![Buffer: somente pontos dentro do buffer serão utilizados na interpolação](./img/IDW-Buffer-425x213.png)
+
+## Geração de superfícies de valores
+
+![Barreiras físicas](./img/IDW-Barrier-425x213.png)
+
+## Geração de superfícies de valores
+
+- Segundo @Embrapa2004 [p. 83], "uma alternativa simples para gerar uma
+superfície bidimensional" consiste em ajustar uma função bidimensional sobre as
+amostras, prevendo valores em uma grade ($\hat{z}_i$), com a seguinte formulação:
+
+- $$
+\hat{z}_{i} = \frac{\sum_{j = 1}^n w_{ij}z_j}{\sum_{j=1}^n w_{ij}}
+$$ {#eq-IDW}
+
+- Em que os pesos são computados segundo o inverso de uma potência $k$ das 
+distâncias das amostras ao ponto de predição:
+
+  - $$
+w_{ij} = \frac{1}{d_{ij}^k}
+$$ {#eq-IDW2}
+
+- É um método extremamente simples e rápido para a obtenção de uma superfície de
+valores.
+
+## Geração de superfícies de valores
+
+
+![Efeito do fator de potência. k = 1](./img/IDW-Power1-Surface-425x135.png)
+
+## Geração de superfícies de valores
+
+![Efeito do fator de potência. k = 2](./img/IDW-Power2-Surface-425x135.png)
+
+## Geração de superfícies de valores
+
+- A Krigagem, por outro lado, é uma "técnica de estimação e predição de 
+superfície baseada na modelagem da estrutura de correlação espacial" 
+[@@Embrapa2004, 90].
+
+
 
 # Referências
   
