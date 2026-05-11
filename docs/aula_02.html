@@ -595,6 +595,64 @@ F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
+<section id="soma-de-efeitos-3" class="slide level2">
+<h2>Soma de efeitos (3)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(PU) ~ log(land) + log(area) + age + y81, data = hprice3)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.0910 -0.1010  0.0081  0.1293  0.6898 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  5.3019510  0.2979496  17.795  &lt; 2e-16 ***
+log(land)   -0.8778141  0.0184149 -47.669  &lt; 2e-16 ***
+log(area)    0.6202023  0.0414998  14.945  &lt; 2e-16 ***
+age         -0.0031569  0.0004201  -7.514 5.93e-13 ***
+y81          0.3672458  0.0264070  13.907  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2291 on 316 degrees of freedom
+Multiple R-squared:  0.8963,    Adjusted R-squared:  0.895 
+F-statistic: 682.8 on 4 and 316 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="soma-de-efeitos-3-1" class="slide level2">
+<h2>Soma de efeitos (3)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(PU) ~ log(land) + log(area) + age + y81 + nbh, 
+    data = hprice3)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.13566 -0.09991  0.00707  0.11831  0.65595 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  5.3820316  0.2945496  18.272  &lt; 2e-16 ***
+log(land)   -0.8789021  0.0181443 -48.440  &lt; 2e-16 ***
+log(area)    0.6169756  0.0408950  15.087  &lt; 2e-16 ***
+age         -0.0030866  0.0004144  -7.448 9.18e-13 ***
+y81          0.3596740  0.0261182  13.771  &lt; 2e-16 ***
+nbh         -0.0191395  0.0058769  -3.257  0.00125 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2257 on 315 degrees of freedom
+Multiple R-squared:  0.8997,    Adjusted R-squared:  0.8981 
+F-statistic:   565 on 5 and 315 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
 <section id="modelo-final" class="slide level2">
 <h2>Modelo Final</h2>
 <ul>
@@ -602,29 +660,77 @@ F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16</code></pre>
 <ul>
 <li class="fragment">área do terreno (moda): 43.560,00 sq. ft. (1 acre <span class="math inline">\(\approx\)</span> 4.047 m2)</li>
 <li class="fragment">área construída (moda): 2.464 sq. ft. (<span class="math inline">\(\approx\)</span> 230 m2)</li>
+<li class="fragment">idade (convenção): 0 (novo)</li>
+<li class="fragment">year (convenção): 1978 (ano de venda)</li>
+<li class="fragment">nbh (convenção): 0</li>
 </ul></li>
 </ul>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Call: lm(formula = log(PU) ~ log(land/43560) + log(area/2464) + age, data =
-         hprice3)
+<pre><code>Call: lm(formula = log(PU) ~ log(land/43560) + log(area/2464) + age + y81 +
+         nbh, data = hprice3)
 
 Coefficients:
                   Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)      0.9548195  0.0207921  45.922  &lt; 2e-16 ***
-log(land/43560) -0.9112903  0.0231436 -39.375  &lt; 2e-16 ***
-log(area/2464)   0.7252967  0.0517281  14.021  &lt; 2e-16 ***
-age             -0.0039366  0.0005278  -7.458 8.46e-13 ***
+(Intercept)      0.8119884  0.0247243  32.842  &lt; 2e-16 ***
+log(land/43560) -0.8789021  0.0181443 -48.440  &lt; 2e-16 ***
+log(area/2464)   0.6169756  0.0408950  15.087  &lt; 2e-16 ***
+age             -0.0030866  0.0004144  -7.448 9.18e-13 ***
+y81              0.3596740  0.0261182  13.771  &lt; 2e-16 ***
+nbh             -0.0191395  0.0058769  -3.257  0.00125 ** 
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard deviation: 0.2905 on 317 degrees of freedom
-Multiple R-squared: 0.8328
-F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16 
+Residual standard deviation: 0.2257 on 315 degrees of freedom
+Multiple R-squared: 0.8997
+F-statistic:   565 on 5 and 315 DF,  p-value: &lt; 2.2e-16 
    AIC    BIC 
-123.29 142.14 </code></pre>
+-36.63 -10.23 </code></pre>
 </div>
+</div>
+</div>
+</section>
+<section id="verificação-dos-resíduos-do-modelo" class="slide level2">
+<h2>Verificação dos resíduos do modelo</h2>
+
+<img data-src="aula_02_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
+<section id="saneamento-do-modelo" class="slide level2">
+<h2>Saneamento do modelo</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> 46  52  67 168 230 
+ 46  52  67 168 230 </code></pre>
+</div>
+</div>
+</section>
+<section id="modelo-final-saneado" class="slide level2">
+<h2>Modelo Final saneado</h2>
+
+<img data-src="aula_02_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
+<section id="modelo-final-saneado-1" class="slide level2">
+<h2>Modelo Final saneado</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: lm(formula = log(PU) ~ log(land/43560) + log(area/2464) + age + y81 +
+         nbh, data = hprice3, subset = -c(46, 52, 67, 168, 230))
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      0.8447054  0.0221096  38.205  &lt; 2e-16 ***
+log(land/43560) -0.8970179  0.0162112 -55.333  &lt; 2e-16 ***
+log(area/2464)   0.6369998  0.0366546  17.378  &lt; 2e-16 ***
+age             -0.0036639  0.0003882  -9.438  &lt; 2e-16 ***
+y81              0.3446584  0.0231028  14.918  &lt; 2e-16 ***
+nbh             -0.0232757  0.0052016  -4.475 1.08e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard deviation: 0.1983 on 310 degrees of freedom
+Multiple R-squared: 0.9222
+F-statistic: 734.7 on 5 and 310 DF,  p-value: &lt; 2.2e-16 
+    AIC     BIC 
+-117.76  -91.47 </code></pre>
 </div>
 </div>
 </section>
@@ -635,8 +741,9 @@ F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16
 <ul>
 <li class="fragment"><span id="eq-EqReg"><span class="math display">\[
 \begin{align*}
-\ln (\text{PU}) &amp;= 0,95 - 0,91\cdot \ln(\text{land}/43560) + \\
-&amp;0,725 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \varepsilon
+\ln (\text{PU}) &amp;= 0,85 - 0,90\cdot \ln(\text{land}/43560) + \\
+&amp;0,64 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \\
+&amp;0,35\cdot y81 - 0,023\cdot \text{nbh} + \varepsilon
 \end{align*}
 \tag{4}\]</span></span></li>
 </ul></li>
@@ -645,8 +752,9 @@ F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16
 <li class="fragment">Para a equação de estimação, deve-se exponenciar a <a href="#/eq-EqReg" class="quarto-xref">Equação&nbsp;4</a>:</li>
 <li class="fragment"><span id="eq-EqEst"><span class="math display">\[
 \begin{align*}
-\text{PU} &amp;= \exp(0,95 - 0,91\cdot \ln(\text{land}/43560) + \\
-&amp;0,725 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \varepsilon)
+\text{PU} &amp;= \exp(0,85 - 0,90\cdot \ln(\text{land}/43560) + \\
+&amp;0,64 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \\
+&amp;0,35\cdot y81 - 0,023\cdot \text{nbh} + \varepsilon)
 \end{align*}
 \tag{5}\]</span></span></li>
 </ul></li>
@@ -676,7 +784,83 @@ F-statistic: 526.4 on 3 and 317 DF,  p-value: &lt; 2.2e-16
 </section>
 <section id="derivação-racional-de-fatores" class="slide level2">
 <h2>Derivação racional de fatores</h2>
-</section></section>
+<ul>
+<li class="fragment">No final do processo de modelagem obtemos:
+<ul>
+<li class="fragment"><span class="math display">\[\widehat{\ln(PU)} = \hat \beta_0 + \hat \beta_1 X_1 + \ldots + \hat \beta_k X_k\]</span></li>
+</ul></li>
+<li class="fragment">Então:
+<ul>
+<li class="fragment"><span class="math display">\[\widehat{PU} = \exp(\hat \beta_0 + \hat \beta_1 X_1 + \ldots + \hat \beta_k X_k)\]</span></li>
+<li class="fragment"><span class="math display">\[\widehat{PU} = \exp(\hat \beta_0) \cdot  \exp(\hat \beta_1 X_1) \cdot \ldots \cdot \exp(\hat \beta_k X_k)\]</span></li>
+</ul></li>
+<li class="fragment">Se o modelo estiver centralizado no lote paradigma:
+<ul>
+<li class="fragment"><span class="math inline">\(\widehat{PU_{\text{Hom}}} = \exp(\hat \beta_0)\)</span></li>
+<li class="fragment"><span class="math inline">\(F_{X_1} = \exp(\hat \beta_1 X_1) = \exp(\hat \beta_1)^{X_1}\)</span></li>
+<li class="fragment"><span class="math inline">\(\ldots\)</span></li>
+<li class="fragment"><span class="math inline">\(F_{X_k} = \exp(\hat \beta_k X_k) = \exp(\hat \beta_k)^{X_k}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="derivação-racional-de-fatores-1" class="slide level2">
+<h2>Derivação racional de fatores</h2>
+<ul>
+<li class="fragment">Obs.: se <span class="math inline">\(\hat \beta_k \ln(X_k)\)</span> então:
+<ul>
+<li class="fragment"><span class="math inline">\(F_{X_k} = \exp[\hat \beta_k \ln(X_k)] = X_k^{\hat \beta_k}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="derivação-racional-de-fatores-2" class="slide level2">
+<h2>Derivação racional de fatores</h2>
+<ul>
+<li class="fragment">Exemplo:</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>dados <span class="ot">&lt;-</span> <span class="fu">within</span>(dados, {</span>
+<span id="cb21-2"><a href=""></a>  Fl <span class="ot">&lt;-</span> (land<span class="sc">/</span><span class="dv">43560</span>)<span class="sc">^</span>(<span class="sc">-</span>.<span class="dv">90</span>)</span>
+<span id="cb21-3"><a href=""></a>  Fa <span class="ot">&lt;-</span> (area<span class="sc">/</span><span class="dv">2464</span>)<span class="sc">^</span>(.<span class="dv">64</span>)</span>
+<span id="cb21-4"><a href=""></a>  Fage <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.003</span>)<span class="sc">^</span>age</span>
+<span id="cb21-5"><a href=""></a>  Fyear <span class="ot">&lt;-</span> <span class="fu">exp</span>(.<span class="dv">35</span>)<span class="sc">^</span>y81</span>
+<span id="cb21-6"><a href=""></a>  PUHom <span class="ot">&lt;-</span> PU<span class="sc">/</span>(Fl<span class="sc">*</span>Fa<span class="sc">*</span>Fage<span class="sc">*</span>Fyear)</span>
+<span id="cb21-7"><a href=""></a>})</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  year y81 price age nbh  cbd area  land  dist        PU    PUHom Fyear
+1 1978   0 60000  48   4 3000 1660  4578 10700 13.106160 2.565806     1
+2 1978   0 40000  83   4 4000 2612  8370 11000  4.778973 1.338243     1
+3 1978   0 34000  58   4 4000 1144  5000 11500  6.800000 1.884636     1
+4 1978   0 63900  11   4 4000 1136 10000 11900  6.390000 2.883111     1
+5 1978   0 44000  48   4 4000 1868 10000 12100  4.400000 1.613544     1
+6 1978   0 46000  78   4 3000 1780  9500 10000  4.842105 1.913430     1
+       Fage        Fa       Fl
+1 0.8658877 0.7766389 7.595754
+2 0.7795800 1.0380369 4.412921
+3 0.8402969 0.6119876 7.016267
+4 0.9675386 0.6092452 3.759924
+5 0.8658877 0.8375894 3.759924
+6 0.7913618 0.8121173 3.937566</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="derivação-racional-de-fatores-3" class="slide level2">
+<h2>Derivação racional de fatores</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">hist</span>(dados<span class="sc">$</span>PU)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_02_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
+<section id="derivação-racional-de-fatores-4" class="slide level2">
+<h2>Derivação racional de fatores</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">hist</span>(dados<span class="sc">$</span>PUHom)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="aula_02_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="geração-de-superfícies-de-valores" class="title-slide slide level1 center">
 <h1>Geração de superfícies de valores</h1>
@@ -732,9 +916,34 @@ w_{ij} = \frac{1}{d_{ij}^k}
 <section id="geração-de-superfícies-de-valores-8" class="slide level2">
 <h2>Geração de superfícies de valores</h2>
 <ul>
-<li class="fragment">A Krigagem, por outro lado, é uma “técnica de estimação e predição de superfície baseada na modelagem da estrutura de correlação espacial” <span class="citation" data-cites="Embrapa2004">(@ <a href="#/referências" role="doc-biblioref" onclick="">Druck et al. 2004, 90</a>)</span>.</li>
+<li class="fragment"><p>A Krigagem, por outro lado, é uma “técnica de estimação e predição de superfície baseada na modelagem da estrutura de correlação espacial” <span class="citation" data-cites="Embrapa2004">(<a href="#/referências" role="doc-biblioref" onclick="">Druck et al. 2004, 90</a>)</span>.</p></li>
+<li class="fragment"><p>“… a diferença entre a krigagem e outros métodos de interpolação é a maneira como os pesos são atribuídos às diferentes amostras. No caso de interpolação linear simples, por exemplo, os pesos são todos iguais a 1/N (N = número de amostras)”;</p></li>
+<li class="fragment"><p>“na interpolação baseada no inverso do quadrado das distâncias, os pesos são definidos como o inverso do quadrado da distância que separa o valor interpolado dos valores observados.”</p></li>
+<li class="fragment"><p>“Na Krigeagem, o procedimento é semelhante ao de interpolação por média móvel ponderada, exceto que aqui os pesos são determinados a partir de uma análise espacial, baseada no semivariograma experimental. Além disso, a krigagem fornece, em média, estimativas não tendenciosas e com variância mínima.”</p></li>
 </ul>
-</section></section>
+</section>
+<section id="geração-de-superfícies-de-valores-9" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/Krigagem_1.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem</p></section>
+<section id="geração-de-superfícies-de-valores-10" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/Krigagem_2.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem: semivariograma experimental</p></section>
+<section id="geração-de-superfícies-de-valores-11" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/Krigagem_3.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem: semivariograma teórico</p></section>
+<section id="geração-de-superfícies-de-valores-12" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+<ul>
+<li class="fragment"><span class="math display">\[\hat Z_{\text{KO}} = \sum_{i=1}^n \lambda_i \cdot z(x_i)\]</span></li>
+</ul>
+</section>
+<section id="geração-de-superfícies-de-valores-13" class="slide level2">
+<h2>Geração de superfícies de valores</h2>
+
+<img data-src="./img/Krigagem_4.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem em malha regular</p></section></section>
 <section id="referências" class="title-slide slide level1 smaller scrollable">
 <h1>Referências</h1>
 
