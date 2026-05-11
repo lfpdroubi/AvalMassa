@@ -276,28 +276,75 @@ fit2 <- update(fit1, .~. + age)
 summary(fit2)
 ```
 
+## Soma de efeitos (3)
+
+```{r}
+fit3 <- update(fit2, .~. + y81)
+summary(fit3)
+```
+
+## Soma de efeitos (3)
+
+```{r}
+fit4 <- update(fit3, .~. + nbh)
+summary(fit4)
+```
+
 ## Modelo Final
 
 - Para definição do modelo final, precisamos definir as características do
 imóvel padrão
   - área do terreno (moda): `r brf(collapse::fmode(hprice3$land))` sq. ft. (1 acre $\approx$ 4.047 m2)
   - área construída (moda): `r brf(collapse::fmode(hprice3$area))` sq. ft. ($\approx$ 230 m2)
+  - idade (convenção): 0 (novo)
+  - year (convenção): 1978 (ano de venda)
+  - nbh (convenção): 0
   
 . . . 
 
 ```{r}
 library(car)
-FinalFit <- lm(log(PU) ~ log(land/43560) + log(area/2464) + age, data = hprice3)
+FinalFit <- lm(log(PU) ~ log(land/43560) + log(area/2464) + age + y81 + nbh,
+               data = hprice3)
 S(FinalFit)
 ```
+
+## Verificação dos resíduos do modelo
+
+```{r}
+library(ggResidpanel)
+resid_panel(FinalFit, type = "standardized")
+```
+
+## Saneamento do modelo
+
+```{r}
+which(abs(rstandard(FinalFit)) > 3)
+```
+
+
+## Modelo Final saneado
+
+```{r}
+FinalFit <- update(FinalFit, subset = -c(46, 52, 67, 168, 230))
+resid_panel(FinalFit, type = "standardized")
+```
+
+## Modelo Final saneado
+
+```{r}
+S(FinalFit)
+```
+
  
 ## Equações de regressão e de estimação
 
 - **Equação de regressão**:
   - $$
     \begin{align*}
-    \ln (\text{PU}) &= 0,95 - 0,91\cdot \ln(\text{land}/43560) + \\
-    &0,725 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \varepsilon
+    \ln (\text{PU}) &= 0,85 - 0,90\cdot \ln(\text{land}/43560) + \\
+    &0,64 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \\
+    &0,35\cdot y81 - 0,023\cdot \text{nbh} + \varepsilon
     \end{align*}
     $$ {#eq-EqReg}
 
@@ -305,8 +352,9 @@ S(FinalFit)
   - Para a equação de estimação, deve-se exponenciar a @eq-EqReg:
   - $$
     \begin{align*}
-    \text{PU} &= \exp(0,95 - 0,91\cdot \ln(\text{land}/43560) + \\
-    &0,725 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \varepsilon)
+    \text{PU} &= \exp(0,85 - 0,90\cdot \ln(\text{land}/43560) + \\
+    &0,64 \cdot \ln(\text{area}/2464) - 0,004\cdot \text{age} + \\
+    &0,35\cdot y81 - 0,023\cdot \text{nbh} + \varepsilon)
     \end{align*}
     $$ {#eq-EqEst}
     
@@ -328,6 +376,64 @@ S(FinalFit)
 - De onde vem o fator área???
 
 ## Derivação racional de fatores
+
+- No final do processo de modelagem obtemos:
+  - $$\widehat{\ln(PU)} = \hat \beta_0 + \hat \beta_1 X_1 + \ldots + \hat \beta_k X_k$$
+  
+- Então:
+  - $$\widehat{PU} = \exp(\hat \beta_0 + \hat \beta_1 X_1 + \ldots + \hat \beta_k X_k)$$
+  - $$\widehat{PU} = \exp(\hat \beta_0) \cdot  \exp(\hat \beta_1 X_1) \cdot \ldots \cdot \exp(\hat \beta_k X_k)$$
+  
+- Se o modelo estiver centralizado no lote paradigma:
+  - $\widehat{PU_{\text{Hom}}} = \exp(\hat \beta_0)$
+  - $F_{X_1} = \exp(\hat \beta_1 X_1) = \exp(\hat \beta_1)^{X_1}$
+  - $\ldots$
+  - $F_{X_k} = \exp(\hat \beta_k X_k) = \exp(\hat \beta_k)^{X_k}$
+  
+## Derivação racional de fatores
+  
+- Obs.: se $\hat \beta_k \ln(X_k)$ então:
+  - $F_{X_k} = \exp[\hat \beta_k \ln(X_k)] = X_k^{\hat \beta_k}$
+  
+## Derivação racional de fatores
+
+- Exemplo:
+
+. . . 
+
+```{r}
+dados <- within(hprice3, PU <- price/land)
+dados <- dados[, c("year", "y81", "price", "age", "nbh", "cbd", "area", "land", "dist", "PU")]
+```
+
+```{r}
+#| echo: true
+dados <- within(dados, {
+  Fl <- (land/43560)^(-.90)
+  Fa <- (area/2464)^(.64)
+  Fage <- exp(-0.003)^age
+  Fyear <- exp(.35)^y81
+  PUHom <- PU/(Fl*Fa*Fage*Fyear)
+})
+```
+
+```{r}
+head(dados)
+```
+
+## Derivação racional de fatores
+
+```{r}
+#| echo: true
+hist(dados$PU)
+```
+
+## Derivação racional de fatores
+
+```{r}
+#| echo: true
+hist(dados$PUHom)
+```
 
 # Geração de superfícies de valores
 
@@ -385,9 +491,41 @@ valores.
 
 - A Krigagem, por outro lado, é uma "técnica de estimação e predição de 
 superfície baseada na modelagem da estrutura de correlação espacial" 
-[@@Embrapa2004, 90].
+[@Embrapa2004, 90].
 
+- "... a diferença entre a krigagem e outros métodos de interpolação é a maneira
+como os pesos são atribuídos às diferentes amostras. No caso de interpolação 
+linear simples, por exemplo, os pesos são todos iguais a 1/N (N = número de 
+amostras)";
 
+- "na interpolação baseada no inverso do quadrado das distâncias, os pesos são 
+definidos como o inverso do quadrado da distância que separa o valor interpolado
+dos valores observados."
+
+- "Na Krigeagem, o procedimento é semelhante ao de interpolação por média móvel 
+ponderada, exceto que aqui os pesos são determinados a partir de uma análise 
+espacial, baseada no semivariograma experimental. Além disso, a krigagem fornece,
+em média, estimativas não tendenciosas e com variância mínima.”
+
+## Geração de superfícies de valores
+
+![Krigagem](./img/Krigagem_1.png)
+
+## Geração de superfícies de valores
+
+![Krigagem: semivariograma experimental](./img/Krigagem_2.png)
+
+## Geração de superfícies de valores
+
+![Krigagem: semivariograma teórico](./img/Krigagem_3.png)
+
+## Geração de superfícies de valores
+
+- $$\hat Z_{\text{KO}} = \sum_{i=1}^n \lambda_i \cdot z(x_i)$$
+
+## Geração de superfícies de valores
+
+![Krigagem em malha regular](./img/Krigagem_4.png)
 
 # Referências
   
