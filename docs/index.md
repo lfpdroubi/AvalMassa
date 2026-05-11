@@ -2,7 +2,7 @@
 
 ### Slides
 
-- [Aula 01](https://github.com/lfpdroubi/AvalMassa/blob/main/docs/aula_01.html)
+- [Aula 01](https://raw.githubusercontent.com/lfpdroubi/AvalMassa/refs/heads/main/docs/aula_01.html)
   - Conjunto de dados utilizados na Aula 01
-- [Aula 02](https://github.com/lfpdroubi/AvalMassa/blob/main/docs/aula_02.html)
+- [Aula 02](https://raw.githubusercontent.com/lfpdroubi/AvalMassa/refs/heads/main/docs/aula_01.html)
   - Conjunto de dados utilizados na Aula 02
