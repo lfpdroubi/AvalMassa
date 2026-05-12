@@ -283,7 +283,7 @@ fit3 <- update(fit2, .~. + y81)
 summary(fit3)
 ```
 
-## Soma de efeitos (3)
+## Soma de efeitos (4)
 
 ```{r}
 fit4 <- update(fit3, .~. + nbh)
@@ -477,6 +477,10 @@ $$ {#eq-IDW2}
 
 - É um método extremamente simples e rápido para a obtenção de uma superfície de
 valores.
+
+## Geração de superfícies de valores: IDW
+
+![IDW: Ilustração](./img/Inverse_Distance_Weighting.png)
 
 ## Geração de superfícies de valores: IDW
 
