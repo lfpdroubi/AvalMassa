@@ -446,19 +446,19 @@ unitários
   - Krigagem
   - IDW
   
-## Geração de superfícies de valores
+## Geração de superfícies de valores: IDW
 
 ![Inverse Distance Weighting](./img/IDW-3Points.png)
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: IDW
 
 ![Buffer: somente pontos dentro do buffer serão utilizados na interpolação](./img/IDW-Buffer-425x213.png)
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: IDW
 
 ![Barreiras físicas](./img/IDW-Barrier-425x213.png)
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: IDW
 
 - Segundo @Embrapa2004 [p. 83], "uma alternativa simples para gerar uma
 superfície bidimensional" consiste em ajustar uma função bidimensional sobre as
@@ -478,16 +478,16 @@ $$ {#eq-IDW2}
 - É um método extremamente simples e rápido para a obtenção de uma superfície de
 valores.
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: IDW
 
 
 ![Efeito do fator de potência. k = 1](./img/IDW-Power1-Surface-425x135.png)
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: IDW
 
 ![Efeito do fator de potência. k = 2](./img/IDW-Power2-Surface-425x135.png)
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: Krigagem
 
 - A Krigagem, por outro lado, é uma "técnica de estimação e predição de 
 superfície baseada na modelagem da estrutura de correlação espacial" 
@@ -507,23 +507,33 @@ ponderada, exceto que aqui os pesos são determinados a partir de uma análise
 espacial, baseada no semivariograma experimental. Além disso, a krigagem fornece,
 em média, estimativas não tendenciosas e com variância mínima.”
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: Krigagem
 
 ![Krigagem](./img/Krigagem_1.png)
 
-## Geração de superfícies de valores
+- @Embrapa2004 [p. 94]:
+  - $$\gamma(h) = \frac{1}{2\mathcal N (\mathbf{h})} \sum_{i=1}^{\mathcal N(\mathbf{h})} [z(\mathbf{u_i}) - z(\mathbf{u_i} + \mathbf{h})]^2$$ {#eq-semivariograma}
+
+## Geração de superfícies de valores: Krigagem
 
 ![Krigagem: semivariograma experimental](./img/Krigagem_2.png)
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: Krigagem
 
 ![Krigagem: semivariograma teórico](./img/Krigagem_3.png)
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: Krigagem
 
-- $$\hat Z_{\text{KO}} = \sum_{i=1}^n \lambda_i \cdot z(x_i)$$
+- $$\hat Z_{\mathbf{u_0}} = \sum_{i=1}^n \lambda_i \cdot Z(\mathbf u_i)$$
+  - Com $\lambda_i$ definidos através do sistema de krigagem ordinária [@Embrapa2004, 104]:
+  - $$
+  \left\{\begin{matrix}
+  \sum_{j=1}^n \lambda_j C(\mathbf{u_i}, \mathbf{u_j}) - \alpha =   C(\mathbf{u_i}, \mathbf{u_0}) &  \text{para}\, i = 1, \ldots, n\\
+  \sum_{j=1}^n \lambda_j= 1&  \\
+  \end{matrix}\right. 
+  $$
 
-## Geração de superfícies de valores
+## Geração de superfícies de valores: Krigagem
 
 ![Krigagem em malha regular](./img/Krigagem_4.png)
 

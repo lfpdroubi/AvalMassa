@@ -227,7 +227,7 @@ Luiz F. P. Droubi
     </div>
 </div>
 
-  <p class="date">11 de maio de 2026</p>
+  <p class="date">12 de maio de 2026</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Índice</h2>
@@ -877,20 +877,20 @@ F-statistic: 734.7 on 5 and 310 DF,  p-value: &lt; 2.2e-16
 </ul></li>
 </ul>
 </section>
-<section id="geração-de-superfícies-de-valores-2" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-idw" class="slide level2">
+<h2>Geração de superfícies de valores: IDW</h2>
 
 <img data-src="./img/IDW-3Points.png" class="r-stretch quarto-figure-center"><p class="caption">Inverse Distance Weighting</p></section>
-<section id="geração-de-superfícies-de-valores-3" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-idw-1" class="slide level2">
+<h2>Geração de superfícies de valores: IDW</h2>
 
 <img data-src="./img/IDW-Buffer-425x213.png" class="r-stretch quarto-figure-center"><p class="caption">Buffer: somente pontos dentro do buffer serão utilizados na interpolação</p></section>
-<section id="geração-de-superfícies-de-valores-4" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-idw-2" class="slide level2">
+<h2>Geração de superfícies de valores: IDW</h2>
 
 <img data-src="./img/IDW-Barrier-425x213.png" class="r-stretch quarto-figure-center"><p class="caption">Barreiras físicas</p></section>
-<section id="geração-de-superfícies-de-valores-5" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-idw-3" class="slide level2">
+<h2>Geração de superfícies de valores: IDW</h2>
 <ul>
 <li class="fragment"><p>Segundo <span class="citation" data-cites="Embrapa2004">Druck et al. (<a href="#/referências" role="doc-biblioref" onclick="">2004, 83</a>)</span>, “uma alternativa simples para gerar uma superfície bidimensional” consiste em ajustar uma função bidimensional sobre as amostras, prevendo valores em uma grade (<span class="math inline">\(\hat{z}_i\)</span>), com a seguinte formulação:</p></li>
 <li class="fragment"><p><span id="eq-IDW"><span class="math display">\[
@@ -905,16 +905,16 @@ w_{ij} = \frac{1}{d_{ij}^k}
 <li class="fragment"><p>É um método extremamente simples e rápido para a obtenção de uma superfície de valores.</p></li>
 </ul>
 </section>
-<section id="geração-de-superfícies-de-valores-6" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-idw-4" class="slide level2">
+<h2>Geração de superfícies de valores: IDW</h2>
 
 <img data-src="./img/IDW-Power1-Surface-425x135.png" class="r-stretch quarto-figure-center"><p class="caption">Efeito do fator de potência. k = 1</p></section>
-<section id="geração-de-superfícies-de-valores-7" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-idw-5" class="slide level2">
+<h2>Geração de superfícies de valores: IDW</h2>
 
 <img data-src="./img/IDW-Power2-Surface-425x135.png" class="r-stretch quarto-figure-center"><p class="caption">Efeito do fator de potência. k = 2</p></section>
-<section id="geração-de-superfícies-de-valores-8" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-krigagem" class="slide level2">
+<h2>Geração de superfícies de valores: Krigagem</h2>
 <ul>
 <li class="fragment"><p>A Krigagem, por outro lado, é uma “técnica de estimação e predição de superfície baseada na modelagem da estrutura de correlação espacial” <span class="citation" data-cites="Embrapa2004">(<a href="#/referências" role="doc-biblioref" onclick="">Druck et al. 2004, 90</a>)</span>.</p></li>
 <li class="fragment"><p>“… a diferença entre a krigagem e outros métodos de interpolação é a maneira como os pesos são atribuídos às diferentes amostras. No caso de interpolação linear simples, por exemplo, os pesos são todos iguais a 1/N (N = número de amostras)”;</p></li>
@@ -922,26 +922,41 @@ w_{ij} = \frac{1}{d_{ij}^k}
 <li class="fragment"><p>“Na Krigeagem, o procedimento é semelhante ao de interpolação por média móvel ponderada, exceto que aqui os pesos são determinados a partir de uma análise espacial, baseada no semivariograma experimental. Além disso, a krigagem fornece, em média, estimativas não tendenciosas e com variância mínima.”</p></li>
 </ul>
 </section>
-<section id="geração-de-superfícies-de-valores-9" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-krigagem-1" class="slide level2">
+<h2>Geração de superfícies de valores: Krigagem</h2>
 
-<img data-src="./img/Krigagem_1.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem</p></section>
-<section id="geração-de-superfícies-de-valores-10" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
-
-<img data-src="./img/Krigagem_2.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem: semivariograma experimental</p></section>
-<section id="geração-de-superfícies-de-valores-11" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
-
-<img data-src="./img/Krigagem_3.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem: semivariograma teórico</p></section>
-<section id="geração-de-superfícies-de-valores-12" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<img data-src="./img/Krigagem_1.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem</p><ul>
+<li class="fragment"><span class="citation" data-cites="Embrapa2004">Druck et al. (<a href="#/referências" role="doc-biblioref" onclick="">2004, 94</a>)</span>:
 <ul>
-<li class="fragment"><span class="math display">\[\hat Z_{\text{KO}} = \sum_{i=1}^n \lambda_i \cdot z(x_i)\]</span></li>
+<li class="fragment"><span id="eq-semivariograma"><span class="math display">\[\gamma(h) = \frac{1}{2\mathcal N (\mathbf{h})} \sum_{i=1}^{\mathcal N(\mathbf{h})} [z(\mathbf{u_i}) - z(\mathbf{u_i} + \mathbf{h})]^2 \tag{9}\]</span></span></li>
+</ul></li>
 </ul>
 </section>
-<section id="geração-de-superfícies-de-valores-13" class="slide level2">
-<h2>Geração de superfícies de valores</h2>
+<section id="geração-de-superfícies-de-valores-krigagem-2" class="slide level2">
+<h2>Geração de superfícies de valores: Krigagem</h2>
+
+<img data-src="./img/Krigagem_2.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem: semivariograma experimental</p></section>
+<section id="geração-de-superfícies-de-valores-krigagem-3" class="slide level2">
+<h2>Geração de superfícies de valores: Krigagem</h2>
+
+<img data-src="./img/Krigagem_3.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem: semivariograma teórico</p></section>
+<section id="geração-de-superfícies-de-valores-krigagem-4" class="slide level2">
+<h2>Geração de superfícies de valores: Krigagem</h2>
+<ul>
+<li class="fragment"><span class="math display">\[\hat Z_{\mathbf{u_0}} = \sum_{i=1}^n \lambda_i \cdot Z(\mathbf u_i)\]</span>
+<ul>
+<li class="fragment">Com <span class="math inline">\(\lambda_i\)</span> definidos através do sistema de krigagem ordinária <span class="citation" data-cites="Embrapa2004">(<a href="#/referências" role="doc-biblioref" onclick="">Druck et al. 2004, 104</a>)</span>:</li>
+<li class="fragment"><span class="math display">\[
+\left\{\begin{matrix}
+\sum_{j=1}^n \lambda_j C(\mathbf{u_i}, \mathbf{u_j}) - \alpha =   C(\mathbf{u_i}, \mathbf{u_0}) &amp;  \text{para}\, i = 1, \ldots, n\\
+\sum_{j=1}^n \lambda_j= 1&amp;  \\
+\end{matrix}\right.
+\]</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="geração-de-superfícies-de-valores-krigagem-5" class="slide level2">
+<h2>Geração de superfícies de valores: Krigagem</h2>
 
 <img data-src="./img/Krigagem_4.png" class="r-stretch quarto-figure-center"><p class="caption">Krigagem em malha regular</p></section></section>
 <section id="referências" class="title-slide slide level1 smaller scrollable">
